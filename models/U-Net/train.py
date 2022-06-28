@@ -23,7 +23,8 @@ DEVICE = "cuda"
 BATCH_SIZE = 16
 NUM_EPOCHS = 50
 LOAD_MODEL = False
-
+IMAGE_HEIGHT = 854
+IMAGE_WIDTH = 480 
 def train_fn(loader, model, optimizer, loss_fn, scaler):
     loop = tqdm(loader)
     for batch_idx, (data, targets) in enumerate(loop):
@@ -47,7 +48,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
 def main():
     train_transform = A.Compose(
         [
-            A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
+            #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
             A.Rotate(limit=35, p=1.0),
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.1),
@@ -62,7 +63,7 @@ def main():
 
     val_transforms = A.Compose(
         [
-            A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
+            #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
             A.Normalize(
                 mean=[0.0, 0.0, 0.0],
                 std=[1.0, 1.0, 1.0],
@@ -91,8 +92,8 @@ def main():
     train_paths, val_paths = train_test_split(train_val_paths, test_size=0.2)
     
 
-    train_dataset = VideoFrameDataset(train_paths)
-    val_dataset = VideoFrameDataset(val_paths)
+    train_dataset = VideoFrameDataset(train_paths, train_transform)
+    val_dataset = VideoFrameDataset(val_paths, val_transforms)
 
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
