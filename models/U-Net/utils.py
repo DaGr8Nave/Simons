@@ -66,7 +66,7 @@ def save_predictions_as_imgs(
         for k in range(13):
             print(preds[:,k,:,:].shape)
             print((preds[:,k,:,:] == 1).shape)
-            real_image[:,preds[k] == 1] = rgb_val[k]
+            real_image[preds[:,k,:,:] == 1] = rgb_val[k]
         real_image = torch.tensor(real_image)
         torchvision.utils.save_image(
             real_image, f"{folder}/pred_{idx}.png"
