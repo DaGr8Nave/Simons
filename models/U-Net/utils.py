@@ -61,6 +61,7 @@ def save_predictions_as_imgs(
         with torch.no_grad():
             preds = torch.sigmoid(model(x))
             preds = (preds > 0.5).float().cpu()
+            preds = torch.squeeze(preds)
         real_image = np.zeros((480, 854, 3))
         for k in range(13):
             print((preds[k] == 1).shape)
