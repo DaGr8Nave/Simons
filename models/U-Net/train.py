@@ -15,14 +15,15 @@ from utils import (
     load_checkpoint,
     save_checkpoint,
     check_accuracy,
+    save_predictions_as_imgs
 )
 
 
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 50
-LOAD_MODEL = False
+NUM_EPOCHS = 0
+LOAD_MODEL = True
 IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 224 
 def train_fn(loader, model, optimizer, loss_fn, scaler):
@@ -103,6 +104,7 @@ def main():
 
 
     check_accuracy(val_loader, model, device=DEVICE)
+    save_predictions_as_imgs(val_loader, model, device=DEVICE)
     scaler = torch.cuda.amp.GradScaler()
 
     for epoch in range(NUM_EPOCHS):
