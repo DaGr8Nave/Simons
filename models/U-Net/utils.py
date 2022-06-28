@@ -60,7 +60,7 @@ def save_predictions_as_imgs(
         x = x.to(device=device)
         with torch.no_grad():
             preds = torch.sigmoid(model(x))
-            preds = (preds > 0.5).float()
+            preds = (preds > 0.5).float().cpu()
         real_image = np.zeros((480, 854, 3))
         for k in range(13):
             real_image[preds[k] == 1] = rgb_val[k]
