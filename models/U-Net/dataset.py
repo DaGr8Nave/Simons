@@ -39,7 +39,7 @@ class VideoFrameDataset(Dataset):
             #print(np.where(mask_img==key))
             mask[value][mask_img == key] = 1
         if self.transforms is not None:
-            augmentations = self.transform(image=image, mask=mask)
+            augmentations = self.transforms(image=image, mask=mask)
             image = augmentations["image"]
             mask = augmentations["mask"]
         return image, mask
