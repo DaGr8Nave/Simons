@@ -73,7 +73,7 @@ def main():
         ],
     )
 
-    model = UNET(in_channels=3, out_channels=13).to(DEVICE)
+    model = UNet(n_channels=3, n_classes=13).to(DEVICE)
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
