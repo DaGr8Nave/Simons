@@ -10,7 +10,6 @@ from torch.utils.data import DataLoader
 from utils import (
     load_checkpoint,
     save_checkpoint,
-    get_loaders,
     check_accuracy,
     save_predictions_as_imgs,
 )
