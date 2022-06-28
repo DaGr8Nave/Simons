@@ -1,5 +1,6 @@
 import torch
 import torchvision
+from PIL import Image
 from dataset import VideoFrameDataset
 from torch.utils.data import DataLoader
 
@@ -44,9 +45,11 @@ def save_predictions_as_imgs(
         with torch.no_grad():
             preds = torch.sigmoid(model(x))
             preds = (preds > 0.5).float()
+        real_image = np.array(3, 480, 854)
+        
         torchvision.utils.save_image(
             preds, f"{folder}/pred_{idx}.png"
         )
-        torchvision.utils.save_image(y.unsqueeze(1), f"{folder}{idx}.png")
+        torchvision.utils.save_image(y, f"{folder}{idx}.png")
 
     model.train()
