@@ -6,6 +6,7 @@ import torch.nn as nn
 import torch.optim as optim
 from unet_model import UNet
 from torch.utils.data import DataLoader
+from dataset import VideoFrameDataset
 import os 
 from sklearn.model_selection import train_test_split
 import numpy as np
