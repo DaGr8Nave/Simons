@@ -1,5 +1,6 @@
 from torch.utils.data import Dataset
 from PIL import Image
+import os
 mapping = {50:0,
           11: 1,
           21: 2,
@@ -13,7 +14,7 @@ mapping = {50:0,
           22: 10,
           33: 11,
           5: 12}
-          
+
 class VideoFrameDataset(Dataset):
     def __init__(self, paths, transforms=None):
         self.image_dir = []
