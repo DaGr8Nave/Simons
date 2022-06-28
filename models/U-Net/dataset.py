@@ -32,7 +32,7 @@ class VideoFrameDataset(Dataset):
     def __getitem__(self, index):
         #print(self.image_dir[index])
         image = np.array(Image.open(self.image_dir[index]).convert("RGB"))
-        mask = np.zeros((13, 480, 854))
+        mask = np.zeros((13, 480, 854), dtype=np.float16)
         mask_img = np.array(Image.open(self.mask_dir[index]))[:,:,0]
         #print(mask_img.shape)
         for key, value in mapping.items():

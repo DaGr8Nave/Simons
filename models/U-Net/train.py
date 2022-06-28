@@ -21,7 +21,7 @@ from utils import (
 
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
-BATCH_SIZE = 16
+BATCH_SIZE = 5
 NUM_EPOCHS = 50
 LOAD_MODEL = False
 IMAGE_HEIGHT = 854
