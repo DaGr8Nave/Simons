@@ -79,7 +79,7 @@ def main():
     train_val_paths = []
     test_paths = []
     test_ind = [43, 48, 52, 55]
-    PATH = '../../../kaggle/input/cholecseg8k'
+    PATH = '../../../../input/cholecseg8k'
     for filename in os.listdir(PATH):
         if int(filename[-2:]) not in test_ind:
             for dirs in os.listdir(os.path.join(PATH, filename)):
