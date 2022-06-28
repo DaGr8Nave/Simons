@@ -64,6 +64,8 @@ def save_predictions_as_imgs(
             preds = torch.squeeze(preds)
         real_image = np.zeros((480, 854, 3))
         for k in range(13):
+            print(preds.shape)
+            print(preds[k].shape)
             print((preds[k] == 1).shape)
             real_image[preds[k] == 1] = rgb_val[k]
         real_image = torch.tensor(real_image)
