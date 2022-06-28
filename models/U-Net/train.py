@@ -23,7 +23,7 @@ NUM_EPOCHS = 50
 LOAD_MODEL = False
 
 def train_fn(loader, model, optimizer, loss_fn, scaler):
-	loop = tqdm(loader)
+    loop = tqdm(loader)
     for batch_idx, (data, targets) in enumerate(loop):
         data = data.to(device=DEVICE)
         targets = targets.float().unsqueeze(1).to(device=DEVICE)
