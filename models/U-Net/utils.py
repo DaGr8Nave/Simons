@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 import torchvision
 from PIL import Image
 from dataset import VideoFrameDataset
