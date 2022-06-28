@@ -6,6 +6,9 @@ import torch.nn as nn
 import torch.optim as optim
 from unet_model import UNet
 from torch.utils.data import DataLoader
+import os 
+from sklearn.model_selection import train_test_split
+import numpy as np
 
 from utils import (
     load_checkpoint,
@@ -72,6 +75,24 @@ def main():
     model = UNET(in_channels=3, out_channels=13).to(DEVICE)
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
+    train_val_paths = []
+    test_paths = []
+    test_ind = [43, 48, 52, 55]
+    PATH = '../../../kaggle/input/cholecseg8k'
+    for filename in os.listdir(PATH):
+        if int(filename[-2:]) not in test_ind:
+            for dirs in os.listdir(os.path.join(PATH, filename)):
+                train_val_paths.append(os.path.join(os.path.join(PATH, filename), dirs))
+        else:
+            for dirs in os.listdir(os.path.join(PATH, filename)):
+                test_paths.append(os.path.join(os.path.join(PATH, filename), dirs))
+    
+    np.random.seed(0)
+    train_paths, val_paths = train_test_split(train_val_paths, test_size=0.2)
+    
+
+    train_dataset = VideoFrameDataset(train_paths)
+    val_dataset = VideoFrameDataset(val_paths)
 
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
