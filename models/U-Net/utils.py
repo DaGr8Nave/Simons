@@ -66,7 +66,7 @@ def save_predictions_as_imgs(
             preds = nn.functional.softmax(model(x), dim=1)
             preds = torch.argmax(preds, dim=1).float().cpu()
             #preds = torch.squeeze(preds)
-        print(preds.shape) #5, 480, 854
+        #print(preds.shape) #5, 480, 854
         real_image = np.zeros((5, 480, 854, 3), dtype=np.uint8)
         for k in range(13):
             real_image[preds == k] = rgb_val[k]
