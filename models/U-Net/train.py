@@ -30,7 +30,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
     loop = tqdm(loader)
     for batch_idx, (data, targets) in enumerate(loop):
         data = data.to(device=DEVICE)
-        targets = targets.Long().to(device=DEVICE)
+        targets = targets.long().to(device=DEVICE)
 
         # forward
         with torch.cuda.amp.autocast():
