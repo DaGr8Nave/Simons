@@ -19,9 +19,9 @@ def dice_coef(y_true, y_pred):
     y_pred_f = y_pred.flatten()
     print((y_true_f*y_pred_f).shape)
     prod = torch.mul(y_true_f,y_pred_f)
-    intersection = np.sum(prod)
+    intersection = torch.sum(prod)
     smooth = 0.0001
-    return (2. * intersection + smooth) / (np.sum(y_true_f) + np.sum(y_pred_f) + smooth)
+    return (2. * intersection + smooth) / (torch.sum(y_true_f) + torch.sum(y_pred_f) + smooth)
 
 def dice_coef_multilabel(y_true, y_pred, numLabels):
     dice=0
