@@ -24,7 +24,7 @@ def check_accuracy(loader, model, device="cuda"):
         for x, y in loader:
             x = x.to(device)
             y = y.to(device)
-            preds = nn.Softmax(model(x), dim=1)
+            preds = nn.functional.Softmax(model(x), dim=1)
             print(preds.shape)
             preds = torch.argmax(preds, dim=1).float().cpu()
             print(preds.shape)
@@ -63,7 +63,7 @@ def save_predictions_as_imgs(
         x = x.to(device=device)
         with torch.no_grad():
             #5, 13, 480, 854
-            preds = nn.Softmax(model(x), dim=1)
+            preds = nn.functional.Softmax(model(x), dim=1)
             preds = torch.argmax(preds, dim=1).float().cpu()
             #preds = torch.squeeze(preds)
         print(preds.shape) #5, 480, 854
