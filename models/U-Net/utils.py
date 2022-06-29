@@ -18,7 +18,7 @@ def dice_coef(y_true, y_pred):
     y_true_f = y_true.flatten()
     y_pred_f = y_pred.flatten()
     print((y_true_f*y_pred_f).shape)
-    intersection = np.sum(y_true_f * y_pred_f)
+    intersection = np.sum(y_true_f * y_pred_f, dtype=torch.float32)
     smooth = 0.0001
     return (2. * intersection + smooth) / (np.sum(y_true_f) + np.sum(y_pred_f) + smooth)
 
