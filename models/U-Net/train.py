@@ -22,8 +22,8 @@ from utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 0
-LOAD_MODEL = True
+NUM_EPOCHS = 15
+LOAD_MODEL = False
 IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 224 
 def train_fn(loader, model, optimizer, loss_fn, scaler):
@@ -104,7 +104,7 @@ def main():
 
 
     check_accuracy(val_loader, model, device=DEVICE)
-    save_predictions_as_imgs(val_loader, model, device=DEVICE)
+    #save_predictions_as_imgs(val_loader, model, device=DEVICE)
     scaler = torch.cuda.amp.GradScaler()
 
     for epoch in range(NUM_EPOCHS):
