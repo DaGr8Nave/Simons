@@ -45,7 +45,7 @@ class VideoFrameDataset(Dataset):
             augmentations = self.transforms(image=image, mask=mask)
             image = augmentations["image"]
             mask = augmentations["mask"]
-        mask = mask.long()
+        mask = mask.Long()
         return image, mask
     def __getcolormask__(self, index):
         color_mask = Image.open(self.color_mask_dir[index])
