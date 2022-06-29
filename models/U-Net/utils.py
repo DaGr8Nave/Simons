@@ -25,9 +25,9 @@ def check_accuracy(loader, model, device="cuda"):
             x = x.to(device)
             y = y.to(device)
             preds = nn.functional.softmax(model(x), dim=1)
-            print(preds[0, :, 395, 205])
+            #print(preds[0, :, 395, 205])
             preds = torch.argmax(preds, dim=1).float()
-            print(preds.shape)
+            #print(preds.shape)
             num_correct += (preds == y).sum()
             num_pixels += torch.numel(preds)
             dice_score += (2 * (preds * y).sum()) / (
