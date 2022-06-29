@@ -17,7 +17,7 @@ def load_checkpoint(checkpoint, model):
 def dice_coef(y_true, y_pred):
     y_true_f = y_true.flatten()
     y_pred_f = y_pred.flatten()
-    print((y_true_f*y_pred_f).shape)
+    #print((y_true_f*y_pred_f).shape)
     prod = torch.mul(y_true_f,y_pred_f)
     intersection = torch.sum(prod)
     smooth = 0.0001
