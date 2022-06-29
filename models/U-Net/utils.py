@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+import torch.nn as nn
 import torchvision
 from PIL import Image
 from dataset import VideoFrameDataset
@@ -23,8 +24,10 @@ def check_accuracy(loader, model, device="cuda"):
         for x, y in loader:
             x = x.to(device)
             y = y.to(device)
-            preds = torch.sigmoid(model(x))
-            preds = (preds > 0.5).float()
+            preds = nn.softmax(model(x), dim=1)
+            print(preds.shape)
+            preds = torch.argmax(preds, dim=1).float().cpu()
+            print(preds.shape)
             num_correct += (preds == y).sum()
             num_pixels += torch.numel(preds)
             dice_score += (2 * (preds * y).sum()) / (
@@ -59,12 +62,14 @@ def save_predictions_as_imgs(
     for idx, (x, y) in enumerate(loader):
         x = x.to(device=device)
         with torch.no_grad():
-            preds = torch.sigmoid(model(x))
-            preds = (preds > 0.5).float().cpu()
-            preds = torch.squeeze(preds)
+            #5, 13, 480, 854
+            preds = nn.softmax(model(x), dim=1)
+            preds = torch.argmax(preds, dim=1).float().cpu()
+            #preds = torch.squeeze(preds)
+        print(preds.shape) #5, 480, 854
         real_image = np.zeros((5, 480, 854, 3), dtype=np.uint8)
         for k in range(13):
-            real_image[preds[:,k,:,:] == 1] = rgb_val[k]
+            real_image[preds == k] = rgb_val[k]
         for k in range(5):
             img = Image.fromarray(real_image[k])
             img.save(f"{folder}{idx}{k}.png")
