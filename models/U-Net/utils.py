@@ -56,20 +56,18 @@ def save_predictions_as_imgs(
     rgb_val[11] = np.array([0,50,128])
     rgb_val[12] = np.array([111,74,0])
 
-    for idx, (x, y) in enumerate(loader):
+    for idx, (x, y, z) in enumerate(loader):
         x = x.to(device=device)
         with torch.no_grad():
             preds = torch.sigmoid(model(x))
             preds = (preds > 0.5).float().cpu()
             preds = torch.squeeze(preds)
-        real_image = np.zeros((5, 480, 854, 3))
+        real_image = np.zeros((5, 480, 854, 3), dtype=np.uint8)
         for k in range(13):
             real_image[preds[:,k,:,:] == 1] = rgb_val[k]
-        real_image = torch.tensor(real_image)
-        print(real_image.shape)
-        torchvision.utils.save_image(
-            real_image, f"{folder}/pred_{idx}.png"
-        )
-        torchvision.utils.save_image(y, f"{folder}{idx}.png")
+        for k in range(5):
+            img = Image.fromarray(real_image[k])
+            img.save(f"{folder}{idx}{k}.png")
+            z.save(f"{folder}{idx}{k}.png")
 
     model.train()
