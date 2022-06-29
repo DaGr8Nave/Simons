@@ -14,6 +14,21 @@ def load_checkpoint(checkpoint, model):
     print("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
 
+def dice_coef(y_true, y_pred):
+    y_true_f = y_true.flatten()
+    y_pred_f = y_pred.flatten()
+    intersection = np.sum(y_true_f * y_pred_f)
+    smooth = 0.0001
+    return (2. * intersection + smooth) / (np.sum(y_true_f) + np.sum(y_pred_f) + smooth)
+
+def dice_coef_multilabel(y_true, y_pred, numLabels):
+    dice=0
+    y_true_one_hot = torch.nn.functional.one_hot(y_true, num_classes=13)
+    y_pred_one_hot = torch.nn.functional.one_hot(y_pred, num_classes=13)
+    for index in range(numLabels):
+        dice += dice_coef(y_true_one_hot[:,:,:,index], y_pred_one_hot[:,:,:,index])
+    return dice/numLabels # taking average
+
 def check_accuracy(loader, model, device="cuda"):
     num_correct = 0
     num_pixels = 0
@@ -30,14 +45,14 @@ def check_accuracy(loader, model, device="cuda"):
             #print(preds.shape)
             num_correct += (preds == y).sum()
             num_pixels += torch.numel(preds)
-            dice_score += (2 * (preds * y).sum()) / (
-                (preds + y).sum() + 1e-8
-            )
+            #dice_score += (2 * (preds * y).sum()) / (
+                #(preds + y).sum() + 1e-8
+            #)
 
     print(
         f"Got {num_correct}/{num_pixels} with acc {num_correct/num_pixels*100:.2f}"
     )
-    print(f"Dice score: {dice_score/len(loader)}")
+    print(f"Dice score: {dice_coef_multilabel(y, preds, 13)}")
     model.train()
 
 def save_predictions_as_imgs(
