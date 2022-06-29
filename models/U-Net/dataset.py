@@ -36,7 +36,6 @@ class VideoFrameDataset(Dataset):
         #print(self.image_dir[index])
         image = np.array(Image.open(self.image_dir[index]).convert("RGB"))
         mask = np.zeros((13, 480, 854), dtype=np.float32)
-        color_mask = Image.open(self.color_mask_dir[index])
         mask_img = np.array(Image.open(self.mask_dir[index]))[:,:,0]
         #print(mask_img.shape)
         for key, value in mapping.items():
@@ -46,4 +45,8 @@ class VideoFrameDataset(Dataset):
             augmentations = self.transforms(image=image, mask=mask)
             image = augmentations["image"]
             mask = augmentations["mask"]
-        return image, mask, color_mask
+        return image, mask
+    def __getcolormask__(self, index):
+        color_mask = Image.open(self.color_mask_dir[index])
+        return color_mask
+    

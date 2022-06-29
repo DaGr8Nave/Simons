@@ -56,7 +56,7 @@ def save_predictions_as_imgs(
     rgb_val[11] = np.array([0,50,128])
     rgb_val[12] = np.array([111,74,0])
 
-    for idx, (x, y, z) in enumerate(loader):
+    for idx, (x, y) in enumerate(loader):
         x = x.to(device=device)
         with torch.no_grad():
             preds = torch.sigmoid(model(x))
@@ -68,6 +68,6 @@ def save_predictions_as_imgs(
         for k in range(5):
             img = Image.fromarray(real_image[k])
             img.save(f"{folder}{idx}{k}.png")
-            z.save(f"{folder}{idx}{k}.png")
+            #z.save(f"{folder}{idx}{k}.png")
 
     model.train()

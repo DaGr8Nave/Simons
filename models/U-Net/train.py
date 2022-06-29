@@ -28,7 +28,7 @@ IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 224 
 def train_fn(loader, model, optimizer, loss_fn, scaler):
     loop = tqdm(loader)
-    for batch_idx, (data, targets, _) in enumerate(loop):
+    for batch_idx, (data, targets) in enumerate(loop):
         data = data.to(device=DEVICE)
         targets = targets.float().to(device=DEVICE)
 
