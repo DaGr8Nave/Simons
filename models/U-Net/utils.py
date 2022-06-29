@@ -24,7 +24,7 @@ def dice_coef(y_true, y_pred):
 def dice_coef_multilabel(y_true, y_pred, numLabels):
     dice=0
     y_true_one_hot = torch.nn.functional.one_hot(y_true, num_classes=13)
-    y_pred_one_hot = torch.nn.functional.one_hot(y_pred, num_classes=13)
+    y_pred_one_hot = torch.nn.functional.one_hot(y_pred.to(torch.int64), num_classes=13)
     for index in range(numLabels):
         dice += dice_coef(y_true_one_hot[:,:,:,index], y_pred_one_hot[:,:,:,index])
     return dice/numLabels # taking average
