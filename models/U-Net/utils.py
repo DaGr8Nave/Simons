@@ -38,7 +38,7 @@ def check_accuracy(loader, model, device="cuda"):
     model.train()
 
 def save_predictions_as_imgs(
-    loader, model, folder="saved_images/", device="cuda"
+    loader, model, folder="", device="cuda"
 ):
     model.eval()
     rgb_val = np.zeros((13, 3))
