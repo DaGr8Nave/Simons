@@ -24,7 +24,7 @@ PATH = '../../../../input/cholecseg8k'
 test_paths = []
 for filename in os.listdir(PATH):
     for dirs in os.listdir(os.path.join(PATH, filename)):
-    	if int(filename[-2:]) in test_ind
+    	if int(filename[-2:]) in test_ind:
         	test_paths.append(os.path.join(os.path.join(PATH, filename), dirs))
 
 val_transforms = A.Compose(
