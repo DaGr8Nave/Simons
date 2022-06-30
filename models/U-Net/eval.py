@@ -69,7 +69,7 @@ for i in range(10):
 	color_mask = test_dataset.__getcolormask__(i)
     with torch.no_grad():
         preds = nn.functional.softmax(model(x), dim=1)
-        print(preds.shape)
+        #print(preds.shape)
         preds = torch.argmax(preds, dim=1).float().cpu()
     real_image = np.zeros((480, 854, 3), dtype=np.uint8)
     for k in range(13):
