@@ -78,8 +78,9 @@ for j in range(10):
     with torch.no_grad():
         preds = nn.functional.softmax(model(x), dim=1)
         #print(preds.shape)
-        preds = torch.argmax(preds, dim=1).float().cpu()
+        preds = torch.argmax(preds, dim=1).float()
     print(f"Dice Score for Prediction {i}: {dice_coef_multilabel(y, preds, 13)}")
+    preds = preds.cpu()
     real_image = np.zeros((480, 854, 3), dtype=np.uint8)
     for k in range(13):
         real_image[preds[0] == k] = rgb_val[k]
