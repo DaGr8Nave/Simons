@@ -33,8 +33,8 @@ class VideoFrameDataset(Dataset):
         return len(self.image_dir)
     def __getitem__(self, index):
         #print(self.image_dir[index])
-        print(self.image_dir[index])
-        print(self.mask_dir[index])
+        #print(self.image_dir[index])
+        #print(self.mask_dir[index])
         image = np.array(Image.open(self.image_dir[index]).convert("RGB"))
         mask = np.zeros((480, 854), dtype=np.float32)
         mask_img = np.array(Image.open(self.mask_dir[index]))[:,:,0]
