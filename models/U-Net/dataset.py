@@ -49,7 +49,7 @@ class VideoFrameDataset(Dataset):
         return image, mask
     def __getimage__(self, index):
         #no normalization
-        image = np.array(Image.open(self.image_dir[index]))
+        image = Image.open(self.image_dir[index])
         return image
     def __getcolormask__(self, index):
         color_mask = Image.open(self.color_mask_dir[index])
