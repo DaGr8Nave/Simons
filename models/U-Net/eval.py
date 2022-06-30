@@ -63,10 +63,10 @@ rgb_val[12] = np.array([111,74,0])
 
 for i in range(10):
 	#Visualize some results
-	x, y = test_dataset.__getitem__(i)
-	x = x.to("cuda").unsqueeze(0)
-	y = y.to("cuda")
-	color_mask = test_dataset.__getcolormask__(i)
+    x, y = test_dataset.__getitem__(i)
+    x = x.to("cuda").unsqueeze(0)
+    y = y.to("cuda")
+    color_mask = test_dataset.__getcolormask__(i)
     with torch.no_grad():
         preds = nn.functional.softmax(model(x), dim=1)
         #print(preds.shape)
