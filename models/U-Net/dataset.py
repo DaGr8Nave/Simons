@@ -23,13 +23,12 @@ class VideoFrameDataset(Dataset):
         self.color_mask_dir = []
         self.transforms = transforms
         for path in paths:
-            for filename in os.listdir(path):
-                if 'endo_watershed_mask.png' in filename:
-                    self.mask_dir.append(os.path.join(path, filename))
-                if 'endo.png' in filename:
-                    self.image_dir.append(os.path.join(path, filename))
-                if 'color_mask.png' in filename:
-                    self.color_mask_dir.append(os.path.join(path, filename))
+            start_num = int(path[-5:])
+            for k in range(80):
+                curr_num = start_num + k
+                self.image_dir.append(os.path.join(path, f'frame_{curr_num}_endo.png'))
+                self.mask_dir.append(os.path.join(path, f'frame_{curr_num}_endo_watershed_mask.png'))
+                self.color_mask_dir.append(os.path.join(path, f'frame_{curr_num}_endo_color_mask.png'))
     def __len__(self):
         return len(self.image_dir)
     def __getitem__(self, index):
