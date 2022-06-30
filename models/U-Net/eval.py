@@ -2,6 +2,7 @@ import torch
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from tqdm import tqdm
+import random
 import torch.nn as nn
 import torch.optim as optim
 from unet_model import UNet
@@ -16,18 +17,23 @@ from utils import (
     load_checkpoint,
     save_checkpoint,
     check_accuracy,
-    save_predictions_as_imgs
+    save_predictions_as_imgs,
+    dice_coef_multilabel
 )
 
 
 test_ind = [43, 48, 52, 55]
 PATH = '../../../../input/cholecseg8k'
 test_paths = []
+train_val_paths = []
 for filename in os.listdir(PATH):
     for dirs in os.listdir(os.path.join(PATH, filename)):
-    	if int(filename[-2:]) in test_ind:
-        	test_paths.append(os.path.join(os.path.join(PATH, filename), dirs))
-
+        if int(filename[-2:]) in test_ind:
+            test_paths.append(os.path.join(os.path.join(PATH, filename), dirs))
+        else:
+            train_val_paths.append(os.path.join(os.path.join(PATH,filename),dirs))
+np.random.seed(0)
+train_paths, val_paths = train_test_split(train_val_paths, test_size=0.2)
 val_transforms = A.Compose(
     [
         #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
@@ -39,13 +45,14 @@ val_transforms = A.Compose(
         ToTensorV2(),
     ],
 )
-
+val_dataset = VideoFrameDataset(val_paths, val_transforms)
 test_dataset = VideoFrameDataset(test_paths, val_transforms)
-model = UNet(n_channels=3, n_classes=13).to(DEVICE)
+model = UNet(n_channels=3, n_classes=13).to("cuda")
 load_checkpoint(torch.load("../../../../input/notebook3855a0b747/Simons/models/U-Net/my_checkpoint.pth.tar"), model)
 test_loader = DataLoader(test_dataset, batch_size=5)
-
+val_loader = DataLoader(val_dataset, batch_size=5)
 check_accuracy(test_loader, model)
+check_accuracy(val_loader, model)
 rgb_val = np.zeros((13, 3))
 rgb_val[0] = np.array([127,127,127])
 rgb_val[1] = np.array([210,140,140])
@@ -60,17 +67,19 @@ rgb_val[9] = np.array([169,255,184])
 rgb_val[10] = np.array([255,160,165])
 rgb_val[11] = np.array([0,50,128])
 rgb_val[12] = np.array([111,74,0])
-
-for i in range(10):
+random.seed(0)
+for j in range(10):
+    i = random.randint(0,test_dataset.__len__())
 	#Visualize some results
     x, y = test_dataset.__getitem__(i)
     x = x.to("cuda").unsqueeze(0)
-    y = y.to("cuda")
+    y = y.to("cuda").unsqueeze(0)
     color_mask = test_dataset.__getcolormask__(i)
     with torch.no_grad():
         preds = nn.functional.softmax(model(x), dim=1)
         #print(preds.shape)
         preds = torch.argmax(preds, dim=1).float().cpu()
+    print(f"Dice Score for Prediction {i}: {dice_coef_multilabel(y, preds, 13)}")
     real_image = np.zeros((480, 854, 3), dtype=np.uint8)
     for k in range(13):
         real_image[preds[0] == k] = rgb_val[k]
