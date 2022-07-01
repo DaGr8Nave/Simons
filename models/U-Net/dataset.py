@@ -47,6 +47,7 @@ class VideoFrameDataset(Dataset):
             image = augmentations["image"]
             mask = augmentations["mask"]
         mask = mask.long()
+        mask = torch.nn.functional.one_hot(mask, 13)
         return image, mask
     def __getimage__(self, index):
         #no normalization
