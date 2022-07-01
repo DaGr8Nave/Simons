@@ -53,7 +53,7 @@ def check_accuracy(loader, model, device="cuda"):
             #print(preds.shape)
             #_, ind = torch.max(preds, dim = 1)
             if preds.dim() != y.dim():
-                preds = torch.nn.functional.one_hot(preds, num_classes=13)
+                preds = torch.nn.functional.one_hot(preds.to(torch.int64), num_classes=13)
             num_correct += (preds == y).sum()
             num_pixels += torch.numel(preds)
             dices = dice_coef_multilabel(y, preds, 13)
