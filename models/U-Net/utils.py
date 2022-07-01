@@ -25,11 +25,14 @@ def dice_coef(y_true, y_pred):
 
 def dice_coef_multilabel(y_true, y_pred, numLabels):
     dice=0
-    y_true_one_hot = torch.nn.functional.one_hot(y_true, num_classes=13)
-    y_pred_one_hot = torch.nn.functional.one_hot(y_pred.to(torch.int64), num_classes=13)
+    scores = []
+    if y_true_one_hot.dim() == 3:
+        y_true_one_hot = torch.nn.functional.one_hot(y_true, num_classes=13)
+    if y_pred_one_hot.dim() == 3:
+        y_pred_one_hot = torch.nn.functional.one_hot(y_pred.to(torch.int64), num_classes=13)
     for index in range(numLabels):
-        dice += dice_coef(y_true_one_hot[:,:,:,index], y_pred_one_hot[:,:,:,index])
-    return dice/numLabels # taking average
+        scores.append(dice_coef(y_true_one_hot[:,:,:,index], y_pred_one_hot[:,:,:,index]))
+    return scores # taking average
 
 def check_accuracy(loader, model, device="cuda"):
     num_correct = 0
@@ -38,6 +41,7 @@ def check_accuracy(loader, model, device="cuda"):
     model.eval()
     dice_score = 0
     batches = 0
+    dice_score = np.zeros((13))
     with torch.no_grad():
         for x, y in loader:
             x = x.to(device)
@@ -47,9 +51,14 @@ def check_accuracy(loader, model, device="cuda"):
             #print(preds[0, :, 395, 205])
             preds = torch.argmax(preds, dim=1).float()
             #print(preds.shape)
+            #_, ind = torch.max(preds, dim = 1)
+            if preds.dim() != y.dim():
+                preds = torch.nn.functional.one_hot(preds, num_classes=13)
             num_correct += (preds == y).sum()
             num_pixels += torch.numel(preds)
-            dice_score += dice_coef_multilabel(y, preds, 13)
+            dices = dice_coef_multilabel(y, preds, 13)
+            for i in range(13):
+                dice_score[i] += dices[i]
             #dice_score += (2 * (preds * y).sum()) / (
                 #(preds + y).sum() + 1e-8
             #)
