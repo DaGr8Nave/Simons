@@ -13,6 +13,15 @@ def save_checkpoint(state, filename="my_checkpoint.pth.tar"):
 def load_checkpoint(checkpoint, model):
     print("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
+def dice_loss(input, target):
+    smooth = 1.
+
+    iflat = input.view(-1)
+    tflat = target.view(-1)
+    intersection = (iflat * tflat).sum()
+    
+    return 1 - ((2. * intersection + smooth) /
+              (iflat.sum() + tflat.sum() + smooth))
 
 def dice_coef(y_true, y_pred):
     y_true_f = y_true.flatten()
