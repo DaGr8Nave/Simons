@@ -26,9 +26,9 @@ def dice_coef(y_true, y_pred):
 def dice_coef_multilabel(y_true, y_pred, numLabels):
     dice=0
     scores = []
-    if y_true_one_hot.dim() == 3:
+    if y_true.dim() == 3:
         y_true_one_hot = torch.nn.functional.one_hot(y_true, num_classes=13)
-    if y_pred_one_hot.dim() == 3:
+    if y_pred.dim() == 3:
         y_pred_one_hot = torch.nn.functional.one_hot(y_pred.to(torch.int64), num_classes=13)
     for index in range(numLabels):
         scores.append(dice_coef(y_true_one_hot[:,:,:,index], y_pred_one_hot[:,:,:,index]))
