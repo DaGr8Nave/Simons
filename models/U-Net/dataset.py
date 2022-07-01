@@ -2,6 +2,7 @@ from torch.utils.data import Dataset
 from PIL import Image
 import os
 import numpy as np
+import torch
 mapping = {50:0,
           11: 1,
           21: 2,
