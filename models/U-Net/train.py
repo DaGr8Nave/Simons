@@ -10,12 +10,13 @@ from dataset import VideoFrameDataset
 import os 
 from sklearn.model_selection import train_test_split
 import numpy as np
+from DiceLoss import DiceLoss
 
 from utils import (
     load_checkpoint,
     save_checkpoint,
     check_accuracy,
-    save_predictions_as_imgs
+    save_predictions_as_imgs,
 )
 
 
@@ -75,7 +76,7 @@ def main():
     )
 
     model = UNet(n_channels=3, n_classes=13).to(DEVICE)
-    loss_fn = nn.CrossEntropyLoss()
+    loss_fn = DiceLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
     test_paths = []
