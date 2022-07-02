@@ -41,7 +41,7 @@ def check_accuracy(loader, model, device="cuda"):
     model.eval()
     dice_score = 0
     batches = 0
-    dice_score = np.zeros((13))
+    dice_score = np.zeros((13), dtype=np.int64)
     with torch.no_grad():
         for x, y in loader:
             x = x.to(device)
@@ -54,6 +54,8 @@ def check_accuracy(loader, model, device="cuda"):
             #_, ind = torch.max(preds, dim = 1)
             if preds.dim() != y.dim():
                 preds = torch.nn.functional.one_hot(preds.to(torch.int64), num_classes=13)
+            print(preds.shape)
+            print(y.shape)
             num_correct += (preds == y).sum()
             num_pixels += torch.numel(preds)
             dices = dice_coef_multilabel(y, preds, 13)
