@@ -35,9 +35,9 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
 
         # forward
         with torch.cuda.amp.autocast():
-            predictions = torch.squeeze(model(data))
-            print(predictions.shape)
-            print(targets.shape)
+            predictions = torch.permute(model(data),  (0,2,3,1))
+            #print(predictions.shape)
+            #print(targets.shape)
             loss = loss_fn(predictions, targets)
 
         # backward

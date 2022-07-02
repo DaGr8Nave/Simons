@@ -32,7 +32,7 @@ def dice_coef_multilabel(y_true, y_pred, numLabels):
         y_pred = torch.nn.functional.one_hot(y_pred.to(torch.int64), num_classes=13)
     for index in range(numLabels):
         scores.append(dice_coef(y_true[:,:,:,index], y_pred[:,:,:,index]))
-    return scores # taking average
+    return scores
 
 def check_accuracy(loader, model, device="cuda"):
     num_correct = 0
