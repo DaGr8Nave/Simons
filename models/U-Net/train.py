@@ -35,6 +35,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
 
         # forward
         with torch.cuda.amp.autocast():
+            predictions = model(data)
             targets = torch.permute(model(data),  (0,3,1,2))
             #print(predictions.shape)
             #print(targets.shape)
