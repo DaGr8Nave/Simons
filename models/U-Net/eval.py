@@ -72,8 +72,8 @@ rgb_val[11] = np.array([0,50,128])
 rgb_val[12] = np.array([111,74,0])
 random.seed(0)
 for j in range(10):
-	print(f"------------------ Results from Prediction {j+1} ------------------")
-    i = random.randint(0,test_dataset.__len__())
+    print(f"------------------ Dice from Prediction {j+1} ------------------")
+    i = random.randint(0, test_dataset.__len__())   
     #Visualize some results
     x, y = test_dataset.__getitem__(i)
     x = x.to("cuda").unsqueeze(0)
