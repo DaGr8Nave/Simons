@@ -41,7 +41,7 @@ def check_accuracy(loader, model, device="cuda"):
     model.eval()
     dice_score = 0
     batches = 0
-    dice_score = np.zeros((13), dtype=np.int64)
+    dice_score = np.zeros((13), dtype=np.float32)
     with torch.no_grad():
         for x, y in loader:
             x = x.to(device)
