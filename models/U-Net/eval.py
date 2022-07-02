@@ -74,7 +74,7 @@ random.seed(0)
 for j in range(10):
 	print(f"------------------ Results from Prediction {j+1} ------------------")
     i = random.randint(0,test_dataset.__len__())
-	#Visualize some results
+    #Visualize some results
     x, y = test_dataset.__getitem__(i)
     x = x.to("cuda").unsqueeze(0)
     y = y.to("cuda").unsqueeze(0)
