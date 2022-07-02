@@ -55,10 +55,12 @@ def check_accuracy(loader, model, device="cuda"):
             labels = torch.argmax(y, dim=3)
             num_correct += (preds == labels).sum()
             num_pixels += torch.numel(preds)
+
             if preds.dim() != y.dim():
                 preds = torch.nn.functional.one_hot(preds.to(torch.int64), num_classes=13)
 
             dices = dice_coef_multilabel(y, preds, 13)
+            print(dices)
             for i in range(13):
                 dice_score[i] += dices[i]
             #dice_score += (2 * (preds * y).sum()) / (
