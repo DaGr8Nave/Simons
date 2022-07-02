@@ -18,7 +18,8 @@ from utils import (
     save_checkpoint,
     check_accuracy,
     save_predictions_as_imgs,
-    dice_coef_multilabel
+    dice_coef_multilabel,
+    formatDice
 )
 
 
@@ -51,7 +52,9 @@ model = UNet(n_channels=3, n_classes=13).to("cuda")
 load_checkpoint(torch.load("../../../../input/train-model/Simons/models/U-Net/my_checkpoint.pth.tar"), model)
 test_loader = DataLoader(test_dataset, batch_size=5)
 val_loader = DataLoader(val_dataset, batch_size=5)
+print("Test Set Results ------------------")
 check_accuracy(test_loader, model)
+print("Validation Set Results ------------------")
 check_accuracy(val_loader, model)
 rgb_val = np.zeros((13, 3))
 rgb_val[0] = np.array([127,127,127])
@@ -79,7 +82,9 @@ for j in range(10):
         preds = nn.functional.softmax(model(x), dim=1)
         #print(preds.shape)
         preds = torch.argmax(preds, dim=1).float()
-    print(f"Dice Score for Prediction {i}: {dice_coef_multilabel(y, preds, 13)}")
+    #print(f"Dice Score for Prediction {i}: {dice_coef_multilabel(y, preds, 13)}")
+    dice = dice_coef_multilabel(y,preds,13)
+    formatDice(dice)
     preds = preds.cpu()
     real_image = np.zeros((480, 854, 3), dtype=np.uint8)
     for k in range(13):

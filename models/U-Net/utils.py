@@ -33,7 +33,10 @@ def dice_coef_multilabel(y_true, y_pred, numLabels):
     for index in range(numLabels):
         scores.append(dice_coef(y_true[:,:,:,index], y_pred[:,:,:,index]))
     return scores
-
+def formatDice(dice):
+    classes = ["Black Background", 'Abdominal Wall', "Liver", 'Gastrointestinal Tract', 'Fat', 'Grasper', 'Connective Tissue', 'Blood', 'Cystic Duct', 'L-hook Electrocautery', 'Gallbladder', 'Hepatic Vein', 'Liver Ligament']
+    for i in range(13):
+        print(f"Dice score for {classes[i]}: {float(dice[i])}")
 def check_accuracy(loader, model, device="cuda"):
     num_correct = 0
     num_pixels = 0
@@ -69,8 +72,10 @@ def check_accuracy(loader, model, device="cuda"):
     print(
         f"Got {num_correct}/{num_pixels} with acc {num_correct/num_pixels*100:.2f}"
     )
-    print(dice_score)
-    print(f"Dice score: {dice_score/batches}")
+    #print(dice_score)
+    dice_score = dice_score/batches
+    formatDice(dice_score)
+    #print(f"Dice score: {dice_score/batches}")
     model.train()
 
 def save_predictions_as_imgs(
