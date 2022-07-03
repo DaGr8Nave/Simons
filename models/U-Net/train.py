@@ -105,7 +105,7 @@ def main():
 
     if LOAD_MODEL:
         load_checkpoint(torch.load("../../../../input/unetforcholecseg8k/my_checkpoint.pth (1).tar"), model)
-
+        optimizer.load_state_dict(torch.load("../../../../input/unetforcholecseg8k/my_checkpoint.pth (1).tar")['optimizer'])
 
     check_accuracy(val_loader, model, device=DEVICE)
     save_predictions_as_imgs(val_loader, model, device=DEVICE)
