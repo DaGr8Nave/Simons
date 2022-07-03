@@ -24,7 +24,7 @@ LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
 NUM_EPOCHS = 10
-LOAD_MODEL = False
+LOAD_MODEL = True
 IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 224 
 def train_fn(loader, model, optimizer, loss_fn, scaler):
@@ -104,7 +104,7 @@ def main():
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
 
     if LOAD_MODEL:
-        load_checkpoint(torch.load("../../../../input/unetforcholecseg8k/my_checkpoint.pth.tar"), model)
+        load_checkpoint(torch.load("../../../../input/train-model/my_checkpoint.pth.tar"), model)
 
 
     check_accuracy(val_loader, model, device=DEVICE)
