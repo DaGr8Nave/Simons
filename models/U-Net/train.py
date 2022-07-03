@@ -104,7 +104,7 @@ def main():
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
 
     if LOAD_MODEL:
-        load_checkpoint(torch.load("../../../../input/train-model/Simons/models/U-Net/my_checkpoint.pth.tar"), model)
+        load_checkpoint(torch.load("../../../../input/unetforcholecseg8k/my_checkpoint.pth.tar"), model)
 
 
     check_accuracy(val_loader, model, device=DEVICE)
