@@ -49,7 +49,7 @@ val_transforms = A.Compose(
 val_dataset = VideoFrameDataset(val_paths, val_transforms)
 test_dataset = VideoFrameDataset(test_paths, val_transforms)
 model = UNet(n_channels=3, n_classes=13).to("cuda")
-load_checkpoint(torch.load("../../../../input/train-model/Simons/models/U-Net/my_checkpoint.pth.tar"), model)
+load_checkpoint(torch.load("../../../../input/unet-for-cholecseg8k/Simons/models/U-Net/my_checkpoint.pth.tar"), model)
 test_loader = DataLoader(test_dataset, batch_size=5)
 val_loader = DataLoader(val_dataset, batch_size=5)
 print("------------------ Test Set Results ------------------")
