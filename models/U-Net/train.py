@@ -106,15 +106,15 @@ def main():
     for i in range(train_dataset.__len__()):
         _, mask = train_dataset[i]
         for j in range(13):
-            cnts[j] += (mask == j).count()
+            cnts[j] += (mask == j).sum()
     for i in range(val_dataset.__len__()):
         _, mask = val_dataset[i]
         for j in range(13):
-            cnts[j] += (mask == j).count()
+            cnts[j] += (mask == j).sum()
     for i in range(test_dataset.__len__()):
         _, mask = test_dataset[i]
         for j in range(13):
-            cnts[j] += (mask == j).count()
+            cnts[j] += (mask == j).sum()
     minimum = np.amin(cnts)
     weights = np.zeros((13,))
     for i in range(13):
