@@ -25,7 +25,7 @@ LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
 NUM_EPOCHS = 12
-LOAD_MODEL = False
+LOAD_MODEL = True
 IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 224 
 loss_per_epoch = []
@@ -126,8 +126,8 @@ def main():
     print(weights)
     loss_fn = DiceLoss(weight=weights)
     if LOAD_MODEL:
-        load_checkpoint(torch.load("../../../../input/unetforcholecseg8k/my_checkpoint.pth (1).tar"), model)
-        optimizer.load_state_dict(torch.load("../../../../input/unetforcholecseg8k/my_checkpoint.pth (1).tar")['optimizer'])
+        load_checkpoint(torch.load("../../../../input/unetforcholecseg8k/12epClassWeightDice.pth.tar"), model)
+        optimizer.load_state_dict(torch.load("../../../../input/unetforcholecseg8k/12epClassWeightDice.pth.tar")['optimizer'])
 
     check_accuracy(val_loader, model, device=DEVICE) 
     save_predictions_as_imgs(val_loader, model, device=DEVICE)
@@ -151,6 +151,6 @@ def main():
             val_loader, model, folder="", device=DEVICE
         )
     plt.plot(loss_per_epoch)
-
+    plt.show()
 if __name__ == "__main__":
     main()
