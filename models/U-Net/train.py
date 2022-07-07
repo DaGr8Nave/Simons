@@ -11,6 +11,7 @@ import os
 from sklearn.model_selection import train_test_split
 import numpy as np
 from DiceLoss import DiceLoss
+import matplotlib.pyplot as plt
 
 from utils import (
     load_checkpoint,
@@ -23,12 +24,14 @@ from utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 10
-LOAD_MODEL = True
+NUM_EPOCHS = 15
+LOAD_MODEL = False
 IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 224 
+loss_per_epoch = []
 def train_fn(loader, model, optimizer, loss_fn, scaler):
     loop = tqdm(loader)
+    current_loss = 0
     for batch_idx, (data, targets) in enumerate(loop):
         data = data.to(device=DEVICE)
         targets = targets.long().to(device=DEVICE)
@@ -40,7 +43,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
             #print(predictions.shape)
             #print(targets.shape)
             loss = loss_fn(predictions, targets)
-
+            current_loss += loss.item()
         # backward
         optimizer.zero_grad()
         scaler.scale(loss).backward()
@@ -49,7 +52,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
 
         # update tqdm loop
         loop.set_postfix(loss=loss.item())
-
+    loss_per_epoch.append(current_loss)
 def main():
     train_transform = A.Compose(
         [
@@ -79,7 +82,6 @@ def main():
     )
 
     model = UNet(n_channels=3, n_classes=13).to(DEVICE)
-    loss_fn = DiceLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
     test_paths = []
@@ -99,7 +101,25 @@ def main():
 
     train_dataset = VideoFrameDataset(train_paths, train_transform)
     val_dataset = VideoFrameDataset(val_paths, val_transforms)
-
+    test_dataset = VideoFrameDataset(test_paths, val_transforms)
+    cnts = np.zeros((13,))
+    for i in range(train_dataset.__len__()):
+        _, mask = train_dataset[i]
+        for j in range(13):
+            cnts[j] += (mask == j).count()
+    for i in range(val_dataset.__len__()):
+        _, mask = val_dataset[i]
+        for j in range(13):
+            cnts[j] += (mask == j).count()
+    for i in range(test_dataset.__len__()):
+        _, mask = test_dataset[i]
+        for j in range(13):
+            cnts[j] += (mask == j).count()
+    minimum = np.amin(cnts)
+    weights = np.zeros((13,))
+    for i in range(13):
+        weights[i] = minimum/cnts[i]
+    loss_fn = DiceLoss(weight=weights)
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
 
@@ -128,7 +148,7 @@ def main():
         save_predictions_as_imgs(
             val_loader, model, folder="", device=DEVICE
         )
-
+    plt.plot(loss_per_epoch)
 
 if __name__ == "__main__":
     main()
