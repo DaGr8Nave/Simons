@@ -109,15 +109,15 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
     for i, (x,y) in enumerate(train_loader):
         for j in range(13):
-            cnts[j] += (y == j).sum()
+            cnts[j] += y[:,:,:,j].sum()
     print(cnts)
     for i, (x,y) in enumerate(val_loader):
         for j in range(13):
-            cnts[j] += (y == j).sum()
+            cnts[j] += y[:,:,:,j].sum()
     print(cnts)
     for i, (x,y) in enumerate(test_loader):
         for j in range(13):
-            cnts[j] += (y == j).sum()
+            cnts[j] += y[:,:,:,j].sum()
     print(cnts)    
     minimum = np.amin(cnts)
     weights = np.zeros((13,), dtype=np.float32)
