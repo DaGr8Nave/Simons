@@ -103,31 +103,33 @@ def main():
     val_dataset = VideoFrameDataset(val_paths, val_transforms)
     test_dataset = VideoFrameDataset(test_paths, val_transforms)
     cnts = np.zeros((13,))
-    for i in range(train_dataset.__len__()):
-        _, mask = train_dataset[i]
-        for j in range(13):
-            cnts[j] += (mask == j).sum()
-    for i in range(val_dataset.__len__()):
-        _, mask = val_dataset[i]
-        for j in range(13):
-            cnts[j] += (mask == j).sum()
-    for i in range(test_dataset.__len__()):
-        _, mask = test_dataset[i]
-        for j in range(13):
-            cnts[j] += (mask == j).sum()
-    minimum = np.amin(cnts)
-    weights = np.zeros((13,))
-    for i in range(13):
-        weights[i] = minimum/cnts[i]
-    loss_fn = DiceLoss(weight=weights)
+    
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
-
+    test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
+    for i, (x,y) in enumerate(train_loader):
+        for j in range(13):
+            cnts[j] += (y == j).sum()
+    print(cnts)
+    for i, (x,y) in enumerate(val_loader):
+        for j in range(13):
+            cnts[j] += (y == j).sum()
+    print(cnts)
+    for i, (x,y) in enumerate(test_loader):
+        for j in range(13):
+            cnts[j] += (y == j).sum()
+    print(cnts)    
+    minimum = np.amin(cnts)
+    weights = np.zeros((13,), dtype=np.float32)
+    for i in range(13):
+        weights[i] = minimum/cnts[i]
+    print(weights)
+    loss_fn = DiceLoss(weight=weights)
     if LOAD_MODEL:
         load_checkpoint(torch.load("../../../../input/unetforcholecseg8k/my_checkpoint.pth (1).tar"), model)
         optimizer.load_state_dict(torch.load("../../../../input/unetforcholecseg8k/my_checkpoint.pth (1).tar")['optimizer'])
 
-    check_accuracy(val_loader, model, device=DEVICE)
+    check_accuracy(val_loader, model, device=DEVICE) 
     save_predictions_as_imgs(val_loader, model, device=DEVICE)
     scaler = torch.cuda.amp.GradScaler()
 
