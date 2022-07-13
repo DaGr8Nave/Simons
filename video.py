@@ -1,21 +1,24 @@
+#import torch
 import argparse
 import cv2
 from dataset import VideoFrameDataset
 import torch
 import numpy as np
+from PIL import Image
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 import torch.nn as nn
 from torch.utils.data import DataLoader
+from models.UNet.unet_parts import *
 from models.UNet.unet_model import UNet
 parser = argparse.ArgumentParser()
 parser.add_argument("--model")
 parser.add_argument("--video")
 parser.add_argument("--output")
 args = parser.parse_args()
-MODEL_PATH = "../../input/unetforcholecseg8k/54epWeightedDice.pth.tar"
-VIDEO_PATH = "../../input/cholecseg8k/video55/video55_00508"
-OUTPUT_PATH = "video.mp4"
+MODEL_PATH = "../" + args.model
+VIDEO_PATH = "../" + args.video
+OUTPUT_PATH = args.output
 val_transforms = A.Compose(
     [
         #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
@@ -31,8 +34,8 @@ val_transforms = A.Compose(
 #make predictions
 dataset = VideoFrameDataset([VIDEO_PATH], transforms=val_transforms)
 result = cv2.VideoWriter(OUTPUT_PATH, 
-                         cv2.VideoWriter_fourcc(*'MJPG'),
-                         10, (854*3, 480))
+                         cv2.VideoWriter_fourcc(*'mp4v'),
+                         25, (854*3, 480))
 loader = DataLoader(dataset, 5, shuffle=False)
 model = UNet(n_channels=3, n_classes=13).to("cuda")
 model.load_state_dict(torch.load(MODEL_PATH)["state_dict"])
@@ -52,23 +55,24 @@ rgb_val[11] = np.array([0,50,128])
 rgb_val[12] = np.array([111,74,0])
 
 for i, (x,y) in enumerate(loader):
-    x.to("cuda")
-    y.to("cuda")
+    x = x.to("cuda")
+    y = y.to("cuda")
     with torch.no_grad():
         preds = nn.functional.softmax(model(x), dim=1)
         #print(preds.shape)
         preds = torch.argmax(preds, dim=1).float()    
     real_image = np.zeros((x.shape[0], 480, 854, 3), dtype=np.uint8)
+    preds = preds.cpu()
     for k in range(13):
         real_image[preds == k] = rgb_val[k]
     for k in range(5):
         predicted = Image.fromarray(real_image[k])
-        original_image = test_dataset.__getimage__(5*i+k)
-        color_mask = test_dataset.__getcolormask__(5*i+k)
+        original_image = dataset.__getimage__(5*i+k)
+        color_mask = dataset.__getcolormask__(5*i+k)
         new_image = Image.new('RGB', (854*3, 480))
         new_image.paste(original_image, (0,0))
         new_image.paste(color_mask, (854,0))
-        new_image.paste(real_image, (1708,0))
+        new_image.paste(predicted, (1708,0))
         open_cv_image = np.array(new_image)
         open_cv_image = open_cv_image[:, : , ::-1].copy()
         result.write(open_cv_image)
