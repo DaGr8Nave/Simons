@@ -4,13 +4,13 @@ from albumentations.pytorch import ToTensorV2
 from tqdm import tqdm
 import torch.nn as nn
 import torch.optim as optim
-from unet_model import UNet
+from models.U-Net.unet_model import UNet
 from torch.utils.data import DataLoader
 from dataset import VideoFrameDataset
 import os 
 from sklearn.model_selection import train_test_split
 import numpy as np
-from DiceLoss import DiceLoss
+from models.U-Net.DiceLoss import DiceLoss
 import matplotlib.pyplot as plt
 
 from utils import (
