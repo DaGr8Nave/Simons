@@ -4,16 +4,17 @@ from albumentations.pytorch import ToTensorV2
 from tqdm import tqdm
 import torch.nn as nn
 import torch.optim as optim
-from models.U-Net.unet_model import UNet
+from models.UNet.unet_parts import *
+from models.UNet.unet_model import UNet
 from torch.utils.data import DataLoader
 from dataset import VideoFrameDataset
 import os 
 from sklearn.model_selection import train_test_split
 import numpy as np
-from models.U-Net.DiceLoss import DiceLoss
+from models.UNet.DiceLoss import DiceLoss
 import matplotlib.pyplot as plt
 
-from utils import (
+from model.UNet.utils import (
     load_checkpoint,
     save_checkpoint,
     check_accuracy,
@@ -24,7 +25,7 @@ from utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 7
+NUM_EPOCHS = 10
 LOAD_MODEL = True
 IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 224 
@@ -126,8 +127,8 @@ def main():
     print(weights)
     loss_fn = DiceLoss(weight=weights)
     if LOAD_MODEL:
-        load_checkpoint(torch.load("../../../../input/unetforcholecseg8k/47epWeightedDice.pth.tar"), model)
-        optimizer.load_state_dict(torch.load("../../../../input/unetforcholecseg8k/47epWeightedDice.pth.tar")['optimizer'])
+        load_checkpoint(torch.load("../../../../input/unetforcholecseg8k/62epWeightedDice.pth.tar"), model)
+        optimizer.load_state_dict(torch.load("../../../../input/unetforcholecseg8k/62epWeightedDice.pth.tar")['optimizer'])
 
     check_accuracy(val_loader, model, device=DEVICE) 
     save_predictions_as_imgs(val_loader, model, device=DEVICE)
