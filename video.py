@@ -1,7 +1,8 @@
 #import torch
 import argparse
 import cv2
-import dataset
+from dataset import VideoFrameDataset
+import torch
 from torch.utils.data import DataLoader
 
 parser = argparse.ArgumentParser()
@@ -19,6 +20,7 @@ result = cv2.VideoWriter(OUTPUT_PATH,
                          cv2.VideoWriter_fourcc(*'MJPG'),
                          10, (854*3, 480))
 loader = DataLoader(dataset, 5, shuffle=False)
+model = torch.load(MODEL_PATH)["state_dict"]
 rgb_val = np.zeros((13, 3))
 rgb_val[0] = np.array([127,127,127])
 rgb_val[1] = np.array([210,140,140])
