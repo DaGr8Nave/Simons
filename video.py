@@ -1,26 +1,41 @@
-#import torch
 import argparse
 import cv2
 from dataset import VideoFrameDataset
 import torch
+import numpy as np
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+import torch.nn as nn
 from torch.utils.data import DataLoader
-
+from models.UNet.unet_model import UNet
 parser = argparse.ArgumentParser()
 parser.add_argument("--model")
 parser.add_argument("--video")
 parser.add_argument("--output")
 args = parser.parse_args()
-MODEL_PATH = args.model
-VIDEO_PATH = args.video
-OUTPUT_PATH = args.output
+MODEL_PATH = "../../input/unetforcholecseg8k/54epWeightedDice.pth.tar"
+VIDEO_PATH = "../../input/cholecseg8k/video55/video55_00508"
+OUTPUT_PATH = "video.mp4"
+val_transforms = A.Compose(
+    [
+        #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
+        A.Normalize(
+            mean=[0.0, 0.0, 0.0],
+            std=[1.0, 1.0, 1.0],
+            max_pixel_value=255.0,
+        ),
+        ToTensorV2(),
+    ],
+)
 
 #make predictions
-dataset = VideoFrameDataset([VIDEO_PATH])
+dataset = VideoFrameDataset([VIDEO_PATH], transforms=val_transforms)
 result = cv2.VideoWriter(OUTPUT_PATH, 
                          cv2.VideoWriter_fourcc(*'MJPG'),
                          10, (854*3, 480))
 loader = DataLoader(dataset, 5, shuffle=False)
-model = torch.load(MODEL_PATH)["state_dict"]
+model = UNet(n_channels=3, n_classes=13).to("cuda")
+model.load_state_dict(torch.load(MODEL_PATH)["state_dict"])
 rgb_val = np.zeros((13, 3))
 rgb_val[0] = np.array([127,127,127])
 rgb_val[1] = np.array([210,140,140])
