@@ -14,7 +14,7 @@ import numpy as np
 from models.UNet.DiceLoss import DiceLoss
 import matplotlib.pyplot as plt
 
-from model.UNet.utils import (
+from models.UNet.utils import (
     load_checkpoint,
     save_checkpoint,
     check_accuracy,
