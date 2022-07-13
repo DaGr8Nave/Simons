@@ -25,7 +25,7 @@ from models.UNet.utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 10
+NUM_EPOCHS = 15
 LOAD_MODEL = True
 IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 224 
