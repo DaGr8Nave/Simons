@@ -12,6 +12,7 @@ import os
 from sklearn.model_selection import train_test_split
 import numpy as np
 from models.UNet.DiceLoss import DiceLoss
+from models.UNet.topoloss import *
 import matplotlib.pyplot as plt
 
 from models.UNet.utils import (
@@ -29,6 +30,7 @@ NUM_EPOCHS = 15
 LOAD_MODEL = True
 IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 224 
+LAMBDA = 3
 loss_per_epoch = []
 def train_fn(loader, model, optimizer, loss_fn, scaler):
     loop = tqdm(loader)
@@ -44,6 +46,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
             #print(predictions.shape)
             #print(targets.shape)
             loss = loss_fn(predictions, targets)
+            loss += LAMBDA * getTopoLoss(predictions, targets)
             current_loss += loss.item()
         # backward
         optimizer.zero_grad()
@@ -133,7 +136,6 @@ def main():
     check_accuracy(val_loader, model, device=DEVICE) 
     save_predictions_as_imgs(val_loader, model, device=DEVICE)
     scaler = torch.cuda.amp.GradScaler()
-
     for epoch in range(NUM_EPOCHS):
         train_fn(train_loader, model, optimizer, loss_fn, scaler)
 
