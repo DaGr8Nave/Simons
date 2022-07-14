@@ -111,6 +111,7 @@ def main():
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
+    '''
     for i, (x,y) in enumerate(train_loader):
         for j in range(13):
             cnts[j] += y[:,:,:,j].sum()
@@ -128,7 +129,8 @@ def main():
     for i in range(13):
         weights[i] = minimum/cnts[i]
     print(weights)
-    loss_fn = DiceLoss(weight=weights)
+    '''
+    loss_fn = DiceLoss()
     if LOAD_MODEL:
         load_checkpoint(torch.load("../../input/unetforcholecseg8k/72epWeightedDice.pth.tar"), model)
         optimizer.load_state_dict(torch.load("../../input/unetforcholecseg8k/72epWeightedDice.pth.tar")['optimizer'])
