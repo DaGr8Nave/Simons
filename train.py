@@ -26,7 +26,7 @@ from models.UNet.utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 15
+NUM_EPOCHS = 7
 LOAD_MODEL = True
 IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 224 
@@ -46,7 +46,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
             #print(predictions.shape)
             #print(targets.shape)
             loss = loss_fn(predictions, targets)
-            loss += LAMBDA * getTopoLoss(predictions, targets)
+            #loss += LAMBDA * getTopoLoss(predictions, targets)
             current_loss += loss.item()
         # backward
         optimizer.zero_grad()
@@ -111,7 +111,6 @@ def main():
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
-    '''
     for i, (x,y) in enumerate(train_loader):
         for j in range(13):
             cnts[j] += y[:,:,:,j].sum()
@@ -129,11 +128,11 @@ def main():
     for i in range(13):
         weights[i] = minimum/cnts[i]
     print(weights)
-    '''
-    loss_fn = DiceLoss()
+
+    loss_fn = DiceLoss(weight=weights)
     if LOAD_MODEL:
-        load_checkpoint(torch.load("../../input/unetforcholecseg8k/72epWeightedDice.pth.tar"), model)
-        optimizer.load_state_dict(torch.load("../../input/unetforcholecseg8k/72epWeightedDice.pth.tar")['optimizer'])
+        load_checkpoint(torch.load("../../input/unetforcholecseg8k/87epWeightedDice.pth.tar"), model)
+        optimizer.load_state_dict(torch.load("../../input/unetforcholecseg8k/87epWeightedDice.pth.tar")['optimizer'])
 
     check_accuracy(val_loader, model, device=DEVICE) 
     save_predictions_as_imgs(val_loader, model, device=DEVICE)
