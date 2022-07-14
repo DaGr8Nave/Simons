@@ -5,7 +5,7 @@ from tqdm import tqdm
 import random
 import torch.nn as nn
 import torch.optim as optim
-from models.U-Net.unet_model import UNet
+from models.UNet.unet_model import UNet
 from torch.utils.data import DataLoader
 from dataset import VideoFrameDataset
 import os 
@@ -13,7 +13,7 @@ from PIL import Image
 from sklearn.model_selection import train_test_split
 import numpy as np
 
-from utils import (
+from model.UNet.utils import (
     load_checkpoint,
     save_checkpoint,
     check_accuracy,
@@ -24,7 +24,7 @@ from utils import (
 
 
 test_ind = [43, 48, 52, 55]
-PATH = '../../../../input/cholecseg8k'
+PATH = '../../input/cholecseg8k'
 test_paths = []
 train_val_paths = []
 for filename in os.listdir(PATH):
@@ -49,7 +49,7 @@ val_transforms = A.Compose(
 val_dataset = VideoFrameDataset(val_paths, val_transforms)
 test_dataset = VideoFrameDataset(test_paths, val_transforms)
 model = UNet(n_channels=3, n_classes=13).to("cuda")
-load_checkpoint(torch.load("../../../../input/unetforcholecseg8k/62epWeightedDice.pth.tar"), model)
+load_checkpoint(torch.load("../../input/unetforcholecseg8k/72epWeightedDice.pth.tar"), model)
 test_loader = DataLoader(test_dataset, batch_size=5)
 val_loader = DataLoader(val_dataset, batch_size=5)
 print("------------------ Test Set Results ------------------")
