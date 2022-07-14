@@ -13,7 +13,7 @@ from PIL import Image
 from sklearn.model_selection import train_test_split
 import numpy as np
 
-from model.UNet.utils import (
+from models.UNet.utils import (
     load_checkpoint,
     save_checkpoint,
     check_accuracy,
