@@ -63,13 +63,19 @@ def main():
             #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
             A.Rotate(limit=35, p=1.0),
             A.HorizontalFlip(p=0.5),
-            A.VerticalFlip(p=0.1),
+            A.VerticalFlip(p=0.5),
+            A.Transpose(p=0.5),
+            A.ElasticTransform(p=0.5, alpha=120, sigma=120 * 0.05, alpha_affine=120 * 0.03),
+            A.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2, p=0.5),
+            A.ChannelShuffle(p=0.5),
             A.Normalize(
                 mean=[0.0, 0.0, 0.0],
                 std=[1.0, 1.0, 1.0],
                 max_pixel_value=255.0,
             ),
+            A.resize.LongestMaxSize(max_size = 400),
             ToTensorV2(),
+
         ],
     )
 
