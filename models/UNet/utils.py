@@ -105,7 +105,7 @@ def save_predictions_as_imgs(
             preds = torch.argmax(preds, dim=1).float().cpu()
             #preds = torch.squeeze(preds)
         #print(preds.shape) #5, 480, 854
-        real_image = np.zeros((5, 240, 427, 3), dtype=np.uint8)
+        real_image = np.zeros((5, 480, 854, 3), dtype=np.uint8)
         for k in range(13):
             real_image[preds == k] = rgb_val[k]
         for k in range(5):
