@@ -26,10 +26,9 @@ from models.UNet.utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 7
-LOAD_MODEL = True
-IMAGE_HEIGHT = 224
-IMAGE_WIDTH = 224 
+NUM_EPOCHS = 15
+LOAD_MODEL = False
+
 LAMBDA = 3
 loss_per_epoch = []
 def train_fn(loader, model, optimizer, loss_fn, scaler):
@@ -73,7 +72,7 @@ def main():
                 std=[1.0, 1.0, 1.0],
                 max_pixel_value=255.0,
             ),
-            A.resize.LongestMaxSize(max_size = 400),
+            A.resize.LongestMaxSize(max_size = 427),
             ToTensorV2(),
 
         ],
@@ -87,6 +86,7 @@ def main():
                 std=[1.0, 1.0, 1.0],
                 max_pixel_value=255.0,
             ),
+            A.resize.LongestMaxSize(max_size = 427),
             ToTensorV2(),
         ],
     )
