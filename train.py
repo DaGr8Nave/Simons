@@ -6,13 +6,14 @@ import torch.nn as nn
 import torch.optim as optim
 from models.UNet.unet_parts import *
 from models.UNet.unet_model import UNet
+from models.NestedUNet import nestedUNet
 from torch.utils.data import DataLoader
 from dataset import VideoFrameDataset
 import os 
 from sklearn.model_selection import train_test_split
 import numpy as np
-from models.UNet.DiceLoss import DiceLoss
-from models.UNet.topoloss import *
+from models import DiceLoss
+from models import *
 import matplotlib.pyplot as plt
 
 from models.UNet.utils import (
@@ -26,7 +27,7 @@ from models.UNet.utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 7
+NUM_EPOCHS = 15
 LOAD_MODEL = True
 
 LAMBDA = 3
@@ -60,12 +61,10 @@ def main():
     train_transform = A.Compose(
         [
             #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
-            A.Rotate(limit=35, p=1.0),
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.5),
             A.ElasticTransform(p=0.5, alpha=120, sigma=120 * 0.05, alpha_affine=120 * 0.03),
-            A.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2, p=0.5),
-            A.ChannelShuffle(p=0.5),
+            A.ColorJitter(brightness=0.5, contrast=0.2, saturation=0.2, hue=0.2, p=0.5),
             A.Normalize(
                 mean=[0.0, 0.0, 0.0],
                 std=[1.0, 1.0, 1.0],
@@ -90,7 +89,7 @@ def main():
         ],
     )
 
-    model = UNet(n_channels=3, n_classes=13).to(DEVICE)
+    model = nestedUNet(n_channels=3, n_classes=13).to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
     test_paths = []
