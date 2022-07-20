@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.optim as optim
 from models.UNet.unet_parts import *
 from models.UNet.unet_model import UNet
-from models.NestedUNet import nestedUNet
+from models.NestedUNet.nestedUNet import *
 from torch.utils.data import DataLoader
 from dataset import VideoFrameDataset
 import os 
@@ -28,7 +28,7 @@ LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
 NUM_EPOCHS = 15
-LOAD_MODEL = True
+LOAD_MODEL = False
 
 LAMBDA = 3
 loss_per_epoch = []
@@ -89,7 +89,7 @@ def main():
         ],
     )
 
-    model = nestedUNet(n_channels=3, n_classes=13).to(DEVICE)
+    model = NestedUNet(n_channels=3, n_classes=13).to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
     test_paths = []
