@@ -13,7 +13,7 @@ import os
 from sklearn.model_selection import train_test_split
 import numpy as np
 from models import DiceLoss
-from models import *
+from models import topoloss
 import matplotlib.pyplot as plt
 
 from models.UNet.utils import (
