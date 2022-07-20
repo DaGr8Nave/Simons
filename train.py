@@ -89,7 +89,7 @@ def main():
         ],
     )
 
-    model = NestedUNet(n_channels=3, n_classes=13).to(DEVICE)
+    model = UNet(n_channels=3, n_classes=13).to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
     test_paths = []
