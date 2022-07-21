@@ -28,7 +28,7 @@ LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
 NUM_EPOCHS = 15
-LOAD_MODEL = True
+LOAD_MODEL = False
 
 LAMBDA = 3
 loss_per_epoch = []
