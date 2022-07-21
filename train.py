@@ -124,7 +124,7 @@ def main():
             cnts[j] += y[:,:,:,j].sum()
     print(cnts)
     for i, (x,y) in enumerate(test_loader):
-        for j in range(ClASSES):
+        for j in range(CLASSES):
             cnts[j] += y[:,:,:,j].sum()
     print(cnts)    
     minimum = np.amin(cnts)
