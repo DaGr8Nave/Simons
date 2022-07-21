@@ -5,7 +5,7 @@ import torchvision
 from PIL import Image
 from dataset import VideoFrameDataset
 from torch.utils.data import DataLoader
-CLASS_IDS=[0,5,9,10]
+CLASS_IDS=[0,5]
 CLASSES = ["Black Background", 'Abdominal Wall', "Liver", 'Gastrointestinal Tract', 'Fat', 'Grasper', 'Connective Tissue', 'Blood', 'Cystic Duct', 'L-hook Electrocautery', 'Gallbladder', 'Hepatic Vein', 'Liver Ligament']
 def save_checkpoint(state, filename="my_checkpoint.pth.tar"):
     print("=> Saving checkpoint")
