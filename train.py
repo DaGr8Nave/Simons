@@ -28,11 +28,11 @@ LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
 NUM_EPOCHS = 15
-LOAD_MODEL = False
+LOAD_MODEL = True
 
-LAMBDA = 3
+LAMBDA = 1e-4
 loss_per_epoch = []
-def train_fn(loader, model, optimizer, loss_fn, scaler):
+def train_fn(loader, model, optimizer, loss_fn, weights=None, scaler):
     loop = tqdm(loader)
     current_loss = 0
     for batch_idx, (data, targets) in enumerate(loop):
@@ -45,7 +45,11 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
             targets = torch.permute(targets,  (0,3,1,2))
             #print(predictions.shape)
             #print(targets.shape)
-            loss = loss_fn(predictions, targets)
+            topo = 0
+            for b in range(data.shape[0]):
+                for c in range(predictions.shape[1]):
+                    topo += getTopoLoss(predictions[b,c,:,:], targets[b,c,:,:]) * weights[c] * LAMBDA
+            loss = loss_fn(predictions, targets) + topo
             #loss += LAMBDA * getTopoLoss(predictions, targets)
             current_loss += loss.item()
         # backward
@@ -88,7 +92,7 @@ def main():
             ToTensorV2(),
         ],
     )
-    CLASSES = 2
+    CLASSES = 13
     model = UNet(n_channels=3, n_classes=CLASSES).to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
@@ -135,14 +139,14 @@ def main():
 
     loss_fn = DiceLoss(weight=weights)
     if LOAD_MODEL:
-        load_checkpoint(torch.load("../../input/unet-for-cholecseg8k-2/30epWeightedDice2.pth.tar"), model)
-        optimizer.load_state_dict(torch.load("../../input/unet-for-cholecseg8k-2/30epWeightedDice2.pth.tar")['optimizer'])
+        load_checkpoint(torch.load("../../input/unetforcholecseg8k/62epWeightedDice2.pth.tar"), model)
+        optimizer.load_state_dict(torch.load("../../input/unetforcholecseg8k/62epWeightedDice2.pth.tar")['optimizer'])
 
     check_accuracy(val_loader, model, device=DEVICE) 
     #save_predictions_as_imgs(val_loader, model, device=DEVICE)
     scaler = torch.cuda.amp.GradScaler()
     for epoch in range(NUM_EPOCHS):
-        train_fn(train_loader, model, optimizer, loss_fn, scaler)
+        train_fn(train_loader, model, optimizer, loss_fn, weights, scaler)
 
         # save model
         checkpoint = {
