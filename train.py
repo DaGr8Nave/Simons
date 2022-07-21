@@ -28,7 +28,7 @@ LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
 NUM_EPOCHS = 15
-LOAD_MODEL = False
+LOAD_MODEL = True
 
 LAMBDA = 3
 loss_per_epoch = []
@@ -135,11 +135,11 @@ def main():
 
     loss_fn = DiceLoss(weight=weights)
     if LOAD_MODEL:
-        load_checkpoint(torch.load("../../input/unetforcholecseg8k/47epWeightedDice.pth.tar"), model)
-        optimizer.load_state_dict(torch.load("../../input/unetforcholecseg8k/47epWeightedDice.pth.tar")['optimizer'])
+        load_checkpoint(torch.load("../../input/unet-for-cholecseg8k-2/15epWeightedDice2.pth.tar"), model)
+        optimizer.load_state_dict(torch.load("../../input/unet-for-cholecseg8k-2/15epWeightedDice2.pth.tar")['optimizer'])
 
     check_accuracy(val_loader, model, device=DEVICE) 
-    save_predictions_as_imgs(val_loader, model, device=DEVICE)
+    #save_predictions_as_imgs(val_loader, model, device=DEVICE)
     scaler = torch.cuda.amp.GradScaler()
     for epoch in range(NUM_EPOCHS):
         train_fn(train_loader, model, optimizer, loss_fn, scaler)
@@ -155,9 +155,9 @@ def main():
         check_accuracy(val_loader, model, device=DEVICE)
 
         # print some examples to a folder
-        save_predictions_as_imgs(
-            val_loader, model, folder="", device=DEVICE
-        )
+        #save_predictions_as_imgs(
+            #val_loader, model, folder="", device=DEVICE
+        #)
     plt.plot(loss_per_epoch)
     plt.show()
 if __name__ == "__main__":
