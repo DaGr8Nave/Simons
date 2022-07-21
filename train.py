@@ -32,7 +32,7 @@ LOAD_MODEL = True
 
 LAMBDA = 1e-4
 loss_per_epoch = []
-def train_fn(loader, model, optimizer, loss_fn, weights=None, scaler):
+def train_fn(loader, model, optimizer, loss_fn, scaler, weights=None):
     loop = tqdm(loader)
     current_loss = 0
     for batch_idx, (data, targets) in enumerate(loop):
@@ -146,7 +146,7 @@ def main():
     #save_predictions_as_imgs(val_loader, model, device=DEVICE)
     scaler = torch.cuda.amp.GradScaler()
     for epoch in range(NUM_EPOCHS):
-        train_fn(train_loader, model, optimizer, loss_fn, weights, scaler)
+        train_fn(train_loader, model, optimizer, loss_fn, scaler, weights=weights)
 
         # save model
         checkpoint = {
