@@ -139,8 +139,8 @@ def main():
 
     loss_fn = DiceLoss(weight=weights)
     if LOAD_MODEL:
-        load_checkpoint(torch.load("../../input/unetforcholecseg8k/62epWeightedDice2.pth.tar"), model)
-        optimizer.load_state_dict(torch.load("../../input/unetforcholecseg8k/62epWeightedDice2.pth.tar")['optimizer'])
+        load_checkpoint(torch.load("../../input/unetforcholecseg8k/62epWeightedDice.pth.tar"), model)
+        optimizer.load_state_dict(torch.load("../../input/unetforcholecseg8k/62epWeightedDice.pth.tar")['optimizer'])
 
     check_accuracy(val_loader, model, device=DEVICE) 
     #save_predictions_as_imgs(val_loader, model, device=DEVICE)
