@@ -36,7 +36,7 @@ def dice_coef_multilabel(y_true, y_pred, numLabels):
     return scores
 def formatDice(dice):
     for i in range(len(CLASS_IDS)):
-        print(f"Dice score for {classes[CLASS_IDS[i]]}: {float(dice[i])}")
+        print(f"Dice score for {CLASSES[CLASS_IDS[i]]}: {float(dice[i])}")
 def check_accuracy(loader, model, device="cuda"):
     num_correct = 0
     num_pixels = 0
