@@ -88,7 +88,7 @@ def main():
             ToTensorV2(),
         ],
     )
-    CLASSES = 4
+    CLASSES = 2
     model = UNet(n_channels=3, n_classes=CLASSES).to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
