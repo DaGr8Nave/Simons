@@ -88,8 +88,8 @@ def main():
             ToTensorV2(),
         ],
     )
-
-    model = UNet(n_channels=3, n_classes=13).to(DEVICE)
+    CLASSES = 4
+    model = UNet(n_channels=3, n_classes=CLASSES).to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
     test_paths = []
@@ -110,26 +110,26 @@ def main():
     train_dataset = VideoFrameDataset(train_paths, train_transform)
     val_dataset = VideoFrameDataset(val_paths, val_transforms)
     test_dataset = VideoFrameDataset(test_paths, val_transforms)
-    cnts = np.zeros((13,))
+    cnts = np.zeros((CLASSES,))
     
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
     for i, (x,y) in enumerate(train_loader):
-        for j in range(13):
+        for j in range(CLASSES):
             cnts[j] += y[:,:,:,j].sum()
     print(cnts)
     for i, (x,y) in enumerate(val_loader):
-        for j in range(13):
+        for j in range(CLASSES):
             cnts[j] += y[:,:,:,j].sum()
     print(cnts)
     for i, (x,y) in enumerate(test_loader):
-        for j in range(13):
+        for j in range(ClASSES):
             cnts[j] += y[:,:,:,j].sum()
     print(cnts)    
     minimum = np.amin(cnts)
-    weights = np.zeros((13,), dtype=np.float32)
-    for i in range(13):
+    weights = np.zeros((CLASSES,), dtype=np.float32)
+    for i in range(CLASSES):
         weights[i] = minimum/cnts[i]
     print(weights)
 

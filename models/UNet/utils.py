@@ -5,7 +5,8 @@ import torchvision
 from PIL import Image
 from dataset import VideoFrameDataset
 from torch.utils.data import DataLoader
-
+CLASS_IDS=[0,5,9,10]
+CLASSES = ["Black Background", 'Abdominal Wall', "Liver", 'Gastrointestinal Tract', 'Fat', 'Grasper', 'Connective Tissue', 'Blood', 'Cystic Duct', 'L-hook Electrocautery', 'Gallbladder', 'Hepatic Vein', 'Liver Ligament']
 def save_checkpoint(state, filename="my_checkpoint.pth.tar"):
     print("=> Saving checkpoint")
     torch.save(state, filename)
@@ -27,16 +28,15 @@ def dice_coef_multilabel(y_true, y_pred, numLabels):
     dice=0
     scores = []
     if y_true.dim() == 3:
-        y_true = torch.nn.functional.one_hot(y_true, num_classes=13)
+        y_true = torch.nn.functional.one_hot(y_true, num_classes=len(CLASS_IDS))
     if y_pred.dim() == 3:
-        y_pred = torch.nn.functional.one_hot(y_pred.to(torch.int64), num_classes=13)
+        y_pred = torch.nn.functional.one_hot(y_pred.to(torch.int64), num_classes=len(CLASS_IDS))
     for index in range(numLabels):
         scores.append(dice_coef(y_true[:,:,:,index], y_pred[:,:,:,index]))
     return scores
 def formatDice(dice):
-    classes = ["Black Background", 'Abdominal Wall', "Liver", 'Gastrointestinal Tract', 'Fat', 'Grasper', 'Connective Tissue', 'Blood', 'Cystic Duct', 'L-hook Electrocautery', 'Gallbladder', 'Hepatic Vein', 'Liver Ligament']
-    for i in range(13):
-        print(f"Dice score for {classes[i]}: {float(dice[i])}")
+    for i in range(len(CLASS_IDS)):
+        print(f"Dice score for {classes[CLASS_IDS[i]]}: {float(dice[i])}")
 def check_accuracy(loader, model, device="cuda"):
     num_correct = 0
     num_pixels = 0
@@ -44,7 +44,7 @@ def check_accuracy(loader, model, device="cuda"):
     model.eval()
     dice_score = 0
     batches = 0
-    dice_score = np.zeros((13), dtype=np.float32)
+    dice_score = np.zeros((len(CLASS_IDS)), dtype=np.float32)
     with torch.no_grad():
         for x, y in loader:
             x = x.to(device)
@@ -60,11 +60,11 @@ def check_accuracy(loader, model, device="cuda"):
             num_pixels += torch.numel(preds)
 
             if preds.dim() != y.dim():
-                preds = torch.nn.functional.one_hot(preds.to(torch.int64), num_classes=13)
+                preds = torch.nn.functional.one_hot(preds.to(torch.int64), num_classes=len(CLASS_IDS))
 
-            dices = dice_coef_multilabel(y, preds, 13)
+            dices = dice_coef_multilabel(y, preds, len(CLASS_IDS))
             #print(dices)
-            for i in range(13):
+            for i in range(len(CLASS_IDS)):
                 dice_score[i] += dices[i]
             #dice_score += (2 * (preds * y).sum()) / (
                 #(preds + y).sum() + 1e-8

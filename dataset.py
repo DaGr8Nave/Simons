@@ -16,7 +16,7 @@ mapping = {50:0,
           22: 10,
           33: 11,
           5: 12}
-
+CLASS_IDS = [0, 5, 9, 10]
 class VideoFrameDataset(Dataset):
     def __init__(self, paths, transforms=None):
         self.image_dir = []
@@ -42,13 +42,16 @@ class VideoFrameDataset(Dataset):
         #print(mask_img.shape)
         for key, value in mapping.items():
             #print(np.where(mask_img==key))
-            mask[mask_img == key] = value
+            if value in CLASS_IDS:
+                mask[mask_img == key] = CLASS_IDS.index(value)
+            else:
+                mask[mask_img == key] = 0
         if self.transforms is not None:
             augmentations = self.transforms(image=image, mask=mask)
             image = augmentations["image"]
             mask = augmentations["mask"]
         mask = mask.long()
-        mask = torch.nn.functional.one_hot(mask, 13)
+        mask = torch.nn.functional.one_hot(mask, len(CLASS_IDS))
         return image, mask
     def __getimage__(self, index):
         #no normalization
