@@ -27,7 +27,7 @@ from models.UNet.utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 15
+NUM_EPOCHS = 2
 LOAD_MODEL = True
 
 LAMBDA = 1e-4
@@ -46,7 +46,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler, weights=None):
             topo = 0
             for b in range(data.shape[0]):
                 for c in range(predictions.shape[1]):
-                    topo += getTopoLoss(predictions[b,c,:,:], targets[b,c,:,:]) * weights[c] * LAMBDA
+                    topo += getTopoLoss(predictions[b,c,:,:], targets[b,c,:,:], topo_size=30) * weights[c] * LAMBDA
             loss = loss_fn(predictions, targets) + topo
             #loss += LAMBDA * getTopoLoss(predictions, targets)
             current_loss += loss.item()
