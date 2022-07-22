@@ -167,8 +167,8 @@ def getTopoLoss(likelihood_tensor, gt_tensor, topo_size=100):
             if not(pairs_lh_pa): continue
             if not(pairs_lh_gt): continue
             
-            if pd_lh.dim() == 1: continue
-            if pd_gt.dim() == 1: continue
+            if pd_lh.ndim == 1: continue
+            if pd_gt.ndim == 1: continue
             force_list, idx_holes_to_fix, idx_holes_to_remove = compute_dgm_force(pd_lh, pd_gt, pers_thresh=0.03)
 
             if (len(idx_holes_to_fix) > 0 or len(idx_holes_to_remove) > 0):
