@@ -41,15 +41,11 @@ def train_fn(loader, model, optimizer, loss_fn, scaler, weights=None):
 
         # forward
         with torch.cuda.amp.autocast():
-            predictions = model(data)
+            predictions = torch.softmax(model(data),dim=1)
             targets = torch.permute(targets,  (0,3,1,2))
-            print(predictions.shape)
-            print(targets.shape)
             topo = 0
             for b in range(data.shape[0]):
                 for c in range(predictions.shape[1]):
-                    print(predictions[b,c,:,:])
-                    print(targets[b,c,:,:])
                     topo += getTopoLoss(predictions[b,c,:,:], targets[b,c,:,:]) * weights[c] * LAMBDA
             loss = loss_fn(predictions, targets) + topo
             #loss += LAMBDA * getTopoLoss(predictions, targets)
