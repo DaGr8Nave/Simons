@@ -47,12 +47,18 @@ def check_accuracy(loader, model, device="cuda"):
     dice_score = np.zeros((len(CLASS_IDS)), dtype=np.float32)
     with torch.no_grad():
         for x, y in loader:
-            x = x.to(device)
-            y = y.to(device)
+            #x = x.to(device)
+            #y = y.to(device)
+            preds = torch.zeros((x.shape[0],512, 1024), dtype=torch.float)
+            for i in range(0, 512, 256):
+                for j in range(0, 1024, 256):
+                    square = x[:,:,i:min(480,i+256),j:min(854,j+256)]
+                    square = square.cuda()
+                    out = nn.functional.softmax(model(square),dim=1)
+                    out = torch.argmax(preds, dim=1).float()
+                    preds[:, i:min(480,i+256), j:min(854,j+256)] = out
             batches += 1
-            preds = nn.functional.softmax(model(x), dim=1)
             #print(preds[0, :, 395, 205])
-            preds = torch.argmax(preds, dim=1).float()
             #print(preds.shape)
             #_, ind = torch.max(preds, dim = 1)
             labels = torch.argmax(y, dim=3)
