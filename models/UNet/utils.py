@@ -52,7 +52,7 @@ def check_accuracy(loader, model, device="cuda"):
             preds = torch.zeros((x.shape[0],512, 1024), dtype=torch.float)
             for i in range(0, 512, 256):
                 for j in range(0, 1024, 256):
-                    square = torch.zeros((x.shape[0], :, 256, 256))
+                    square = torch.zeros((x.shape[0], 3, 256, 256))
                     square[:, :, 0:min(256, 480-i), 0:min(256, 854-j)] = x[:,:,i:min(480,i+256),j:min(854,j+256)]
                     square = square.cuda()
                     out = nn.functional.softmax(model(square),dim=1)
