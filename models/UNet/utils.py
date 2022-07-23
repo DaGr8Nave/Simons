@@ -49,15 +49,15 @@ def check_accuracy(loader, model, device="cuda"):
         for x, y in loader:
             #x = x.to(device)
             #y = y.to(device)
-            preds = torch.zeros((x.shape[0],512, 1024), dtype=torch.float)
-            for i in range(0, 512, 256):
-                for j in range(0, 1024, 256):
-                    square = torch.zeros((x.shape[0], 3, 256, 256))
-                    square[:, :, 0:min(256, 480-i), 0:min(256, 854-j)] = x[:,:,i:min(480,i+256),j:min(854,j+256)]
+            preds = torch.zeros((x.shape[0],480, 960), dtype=torch.float)
+            for i in range(0, 480, 480):
+                for j in range(0, 960, 480):
+                    square = torch.zeros((x.shape[0], 3, 480, 480))
+                    square[:, :, 0:480, 0:min(480, 854-j)] = x[:,:,0:480,j:min(854,j+480)]
                     square = square.cuda()
                     out = nn.functional.softmax(model(square),dim=1)
                     out = torch.argmax(out, dim=1).float()
-                    preds[:, i:i+256, j:j+256] = out
+                    preds[:, i:i+480, j:j+480] = out
             preds = preds[:,0:480,0:854]
             batches += 1
             #print(preds[0, :, 395, 205])
