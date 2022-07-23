@@ -130,7 +130,7 @@ def main():
         for j in range(1,CLASSES):
             cnts[j] += y[:,:,:,j].sum()
     print(cnts)    
-    minimum = np.amin(cnts)
+    minimum = np.amin(cnts[1:])
     weights = np.zeros((CLASSES,), dtype=np.float32)
     for i in range(1,CLASSES):
         weights[i] = minimum/cnts[i]
