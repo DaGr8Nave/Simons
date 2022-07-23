@@ -57,6 +57,7 @@ def check_accuracy(loader, model, device="cuda"):
                     out = nn.functional.softmax(model(square),dim=1)
                     out = torch.argmax(preds, dim=1).float()
                     preds[:, i:min(480,i+256), j:min(854,j+256)] = out
+            preds = preds[:,:,0:480,0:854]
             batches += 1
             #print(preds[0, :, 395, 205])
             #print(preds.shape)
