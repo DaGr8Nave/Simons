@@ -100,8 +100,9 @@ for j in range(10):
     real_image = Image.fromarray(real_image)
     original_image = np.array(test_dataset.__getimage__(i), dtype=np.uint8)
     transformed = center_crop(image = original_image, mask = color_mask)
-    original_image = transformed['image']
-    color_mask = transformed['mask']
+    original_image = Image.fromarray(transformed['image'])
+    color_mask = Image.fromarray(transformed['mask'])
+    
     #original_image, color_mask, real_image
     new_image = Image.new('RGB', (480*3, 480))
     new_image.paste(original_image, (0,0))
