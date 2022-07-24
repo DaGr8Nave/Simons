@@ -47,6 +47,12 @@ val_transforms = A.Compose(
         ToTensorV2(),
     ],
 )
+center_crop = A.Compose(
+    [
+        A.CenterCrop(480,480),
+    ]
+    
+)
 val_dataset = VideoFrameDataset(val_paths, val_transforms)
 test_dataset = VideoFrameDataset(test_paths, val_transforms)
 model = UNet(n_channels=3, n_classes=13).to("cuda")
@@ -93,6 +99,9 @@ for j in range(10):
         real_image[preds[0] == k] = rgb_val[k]
     real_image = Image.fromarray(real_image)
     original_image = test_dataset.__getimage__(i)
+    transformed = center_crop(original_image = original_image, color_mask = color_mask)
+    original_image = transformed['original_image']
+    color_mask = transformed['color_mask']
     #original_image, color_mask, real_image
     new_image = Image.new('RGB', (480*3, 480))
     new_image.paste(original_image, (0,0))
