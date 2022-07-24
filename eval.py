@@ -87,14 +87,14 @@ for j in range(10):
     dice = dice_coef_multilabel(y,preds,13)
     formatDice(dice)
     preds = preds.cpu()
-    real_image = np.zeros((480, 854, 3), dtype=np.uint8)
+    real_image = np.zeros((480, 480, 3), dtype=np.uint8)
     for k in range(13):
         real_image[preds[0] == k] = rgb_val[k]
     real_image = Image.fromarray(real_image)
     original_image = test_dataset.__getimage__(i)
     #original_image, color_mask, real_image
-    new_image = Image.new('RGB', (854*3, 480))
+    new_image = Image.new('RGB', (480*3, 480))
     new_image.paste(original_image, (0,0))
-    new_image.paste(color_mask, (854,0))
-    new_image.paste(real_image, (1708,0))
+    new_image.paste(color_mask, (480,0))
+    new_image.paste(real_image, (960,0))
     new_image.save(f"prediction{i}.png")
