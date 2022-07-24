@@ -85,7 +85,7 @@ for j in range(10):
     x, y = test_dataset.__getitem__(i)
     x = x.to("cuda").unsqueeze(0)
     y = y.to("cuda").unsqueeze(0)
-    color_mask = test_dataset.__getcolormask__(i)
+    color_mask = np.array(test_dataset.__getcolormask__(i),dtype=np.uint8)
     with torch.no_grad():
         preds = nn.functional.softmax(model(x), dim=1)
         #print(preds.shape)
@@ -98,7 +98,7 @@ for j in range(10):
     for k in range(13):
         real_image[preds[0] == k] = rgb_val[k]
     real_image = Image.fromarray(real_image)
-    original_image = test_dataset.__getimage__(i)
+    original_image = np.array(test_dataset.__getimage__(i), dtype=np.uint8)
     transformed = center_crop(image = original_image, mask = color_mask)
     original_image = transformed['image']
     color_mask = transformed['mask']
