@@ -99,9 +99,9 @@ for j in range(10):
         real_image[preds[0] == k] = rgb_val[k]
     real_image = Image.fromarray(real_image)
     original_image = test_dataset.__getimage__(i)
-    transformed = center_crop(original_image = original_image, color_mask = color_mask)
-    original_image = transformed['original_image']
-    color_mask = transformed['color_mask']
+    transformed = center_crop(image = original_image, mask = color_mask)
+    original_image = transformed['image']
+    color_mask = transformed['mask']
     #original_image, color_mask, real_image
     new_image = Image.new('RGB', (480*3, 480))
     new_image.paste(original_image, (0,0))
