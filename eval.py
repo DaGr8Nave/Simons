@@ -38,6 +38,7 @@ train_paths, val_paths = train_test_split(train_val_paths, test_size=0.2)
 val_transforms = A.Compose(
     [
         #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
+        A.CenterCrop(480,480),
         A.Normalize(
             mean=[0.0, 0.0, 0.0],
             std=[1.0, 1.0, 1.0],
