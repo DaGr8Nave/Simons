@@ -63,7 +63,7 @@ def main():
     train_transform = A.Compose(
         [
             #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
-            A.RandomCrop(480,480),
+            A.CenterCrop(480,480),
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.5),
             A.ElasticTransform(p=0.5, alpha=120, sigma=120 * 0.05, alpha_affine=120 * 0.03),
@@ -82,6 +82,7 @@ def main():
     val_transforms = A.Compose(
         [
             #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
+            A.CenterCrop(480,480),
             A.Normalize(
                 mean=[0.0, 0.0, 0.0],
                 std=[1.0, 1.0, 1.0],
@@ -119,20 +120,20 @@ def main():
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
     for i, (x,y) in enumerate(train_loader):
-        for j in range(1,CLASSES):
+        for j in range(CLASSES):
             cnts[j] += y[:,:,:,j].sum()
     print(cnts)
     for i, (x,y) in enumerate(val_loader):
-        for j in range(1,CLASSES):
+        for j in range(CLASSES):
             cnts[j] += y[:,:,:,j].sum()
     print(cnts)
     for i, (x,y) in enumerate(test_loader):
-        for j in range(1,CLASSES):
+        for j in range(CLASSES):
             cnts[j] += y[:,:,:,j].sum()
     print(cnts)    
-    minimum = np.amin(cnts[1:])
+    minimum = np.amin(cnts)
     weights = np.zeros((CLASSES,), dtype=np.float32)
-    for i in range(1,CLASSES):
+    for i in range(CLASSES):
         weights[i] = minimum/cnts[i]
     print(weights)
 
