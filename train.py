@@ -27,7 +27,7 @@ from models.UNet.utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 35
+NUM_EPOCHS = 25
 LOAD_MODEL = False
 
 LAMBDA = 1e-4
