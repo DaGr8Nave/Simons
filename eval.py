@@ -92,7 +92,7 @@ for j in range(50):
         preds = torch.argmax(preds, dim=1).float()
     #print(f"Dice Score for Prediction {i}: {dice_coef_multilabel(y, preds, 13)}")
     dice = dice_coef_multilabel(y,preds,13)
-    formatDice(dice)
+    formatDice(dice[:,0]/dice[:,1])
     preds = preds.cpu()
     real_image = np.zeros((480, 480, 3), dtype=np.uint8)
     for k in range(13):
