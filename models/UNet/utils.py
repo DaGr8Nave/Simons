@@ -75,7 +75,7 @@ def check_accuracy(loader, model, device="cuda"):
         f"Got {num_correct}/{num_pixels} with acc {num_correct/num_pixels*100:.2f}"
     )
     #print(dice_score)
-    final_score = np.zeros((len(CLASS_IDS, 2)))
+    final_score = np.zeros((len(CLASS_IDS)))
     for i in range(len(CLASS_IDS)):
         final_score[i] = (0.0001+dice_score[i][0])/(0.0001+dice_score[i][1])
     formatDice(final_score)
