@@ -66,8 +66,8 @@ def check_accuracy(loader, model, device="cuda"):
             dices = dice_coef_multilabel(y, preds, len(CLASS_IDS))
             #print(dices)
             for i in range(len(CLASS_IDS)):
-                dice_score[i][0] += dices[i][1]
-                dice_score[i][1] += dices[i][2]
+                dice_score[i][0] += dices[i][0]
+                dice_score[i][1] += dices[i][1]
             #dice_score += (2 * (preds * y).sum()) / (
                 #(preds + y).sum() + 1e-8
             #)
