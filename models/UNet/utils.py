@@ -22,7 +22,8 @@ def dice_coef(y_true, y_pred):
     prod = torch.mul(y_true_f,y_pred_f)
     intersection = torch.sum(prod)
     smooth = 0.0001
-    return (2. * intersection + smooth) / (torch.sum(y_true_f) + torch.sum(y_pred_f) + smooth)
+    ret = torch.tensor([(2. * intersection + smooth), (torch.sum(y_true_f) + torch.sum(y_pred_f) + smooth)])
+    return ret
 
 def dice_coef_multilabel(y_true, y_pred, numLabels):
     dice=0
@@ -44,7 +45,7 @@ def check_accuracy(loader, model, device="cuda"):
     model.eval()
     dice_score = 0
     batches = 0
-    dice_score = np.zeros((len(CLASS_IDS)), dtype=np.float32)
+    dice_score = np.zeros((len(CLASS_IDS), 2), dtype=np.float32)
     with torch.no_grad():
         for x, y in loader:
             x = x.to(device)
@@ -65,7 +66,8 @@ def check_accuracy(loader, model, device="cuda"):
             dices = dice_coef_multilabel(y, preds, len(CLASS_IDS))
             #print(dices)
             for i in range(len(CLASS_IDS)):
-                dice_score[i] += dices[i]
+                dice_score[i][0] += dices[i][1]
+                dice_score[i][1] += dices[i][2]
             #dice_score += (2 * (preds * y).sum()) / (
                 #(preds + y).sum() + 1e-8
             #)
@@ -73,8 +75,10 @@ def check_accuracy(loader, model, device="cuda"):
         f"Got {num_correct}/{num_pixels} with acc {num_correct/num_pixels*100:.2f}"
     )
     #print(dice_score)
-    dice_score = dice_score/batches
-    formatDice(dice_score)
+    final_score = np.zeros((len(CLASS_IDS, 2)))
+    for i in range(len(CLASS_IDS)):
+        final_score[i] = (0.0001+dice_score[i][0])/(0.0001+dice_score[i][1])
+    formatDice(final_score)
     #print(f"Dice score: {dice_score/batches}")
     model.train()
 
