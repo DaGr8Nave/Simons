@@ -92,7 +92,7 @@ def main():
             ToTensorV2(),
         ],
     )
-    CLASSES = 13
+    CLASSES = 2
     model = UNet(n_channels=3, n_classes=CLASSES).to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
@@ -135,6 +135,7 @@ def main():
     weights = np.zeros((CLASSES,), dtype=np.float32)
     for i in range(CLASSES):
         weights[i] = minimum/cnts[i]
+    weights[0]=0
     print(weights)
 
     loss_fn = DiceLoss(weight=weights)
