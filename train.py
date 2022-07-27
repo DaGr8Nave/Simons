@@ -27,8 +27,8 @@ from models.UNet.utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 5
-NUM_EPOCHS = 25
-LOAD_MODEL = False
+NUM_EPOCHS = 10
+LOAD_MODEL = True
 
 LAMBDA = 1e-4
 loss_per_epoch = []
@@ -44,9 +44,9 @@ def train_fn(loader, model, optimizer, loss_fn, scaler, weights=None):
             predictions = torch.softmax(model(data),dim=1)
             targets = torch.permute(targets,  (0,3,1,2))
             topo = 0
-            #for b in range(data.shape[0]):
-                #for c in range(predictions.shape[1]):
-                    #topo += getTopoLoss(predictions[b,c,:,:], targets[b,c,:,:], topo_size=30) * weights[c] * LAMBDA
+            for b in range(data.shape[0]):
+                for c in range(predictions.shape[1]):
+                    topo += getTopoLoss(predictions[b,c,:,:], targets[b,c,:,:], topo_size=30) * weights[c] * LAMBDA
             loss = loss_fn(predictions, targets) + topo
             #loss += LAMBDA * getTopoLoss(predictions, targets)
             current_loss += loss.item()
@@ -92,7 +92,7 @@ def main():
             ToTensorV2(),
         ],
     )
-    CLASSES = 2
+    CLASSES = 13
     model = UNet(n_channels=3, n_classes=CLASSES).to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
@@ -135,7 +135,6 @@ def main():
     weights = np.zeros((CLASSES,), dtype=np.float32)
     for i in range(CLASSES):
         weights[i] = minimum/cnts[i]
-    weights[0]=0
     print(weights)
 
     loss_fn = DiceLoss(weight=weights)
