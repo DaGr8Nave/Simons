@@ -26,7 +26,7 @@ from models.UNet.utils import (
 
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
-BATCH_SIZE = 5
+BATCH_SIZE = 2
 NUM_EPOCHS = 10
 LOAD_MODEL = True
 
@@ -139,8 +139,8 @@ def main():
 
     loss_fn = DiceLoss(weight=weights)
     if LOAD_MODEL:
-        load_checkpoint(torch.load("../../input/unet-cholecseg8k-center-crop/80epCenterCrop.pth.tar"), model)
-        optimizer.load_state_dict(torch.load("../../input/unet-cholecseg8k-center-crop/80epCenterCrop.pth.tar")['optimizer'])
+        load_checkpoint(torch.load("../../input/unet-cholecseg8k-center-crop/83epCenterCrop.pth.tar"), model)
+        optimizer.load_state_dict(torch.load("../../input/unet-cholecseg8k-center-crop/83epCenterCrop.pth.tar")['optimizer'])
 
     check_accuracy(val_loader, model, device=DEVICE) 
     #save_predictions_as_imgs(val_loader, model, device=DEVICE)
