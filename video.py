@@ -13,7 +13,7 @@ from models.UNet.unet_parts import *
 from models.UNet.unet_model import UNet
 parser = argparse.ArgumentParser()
 parser.add_argument("--model")
-parser.add_argument("--video")
+parser.add_argument("--video") 
 parser.add_argument("--output")
 args = parser.parse_args()
 MODEL_PATH = "../" + args.model
@@ -22,6 +22,7 @@ OUTPUT_PATH = args.output
 val_transforms = A.Compose(
     [
         #A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
+        A.CenterCrop(480,480),
         A.Normalize(
             mean=[0.0, 0.0, 0.0],
             std=[1.0, 1.0, 1.0],
@@ -40,7 +41,7 @@ center_crop = A.Compose(
 dataset = VideoFrameDataset([VIDEO_PATH], transforms=val_transforms)
 result = cv2.VideoWriter(OUTPUT_PATH, 
                          cv2.VideoWriter_fourcc(*'mp4v'),
-                         25, (854*3, 480))
+                         25, (480*3, 480))
 loader = DataLoader(dataset, 5, shuffle=False)
 model = UNet(n_channels=3, n_classes=13).to("cuda")
 model.load_state_dict(torch.load(MODEL_PATH)["state_dict"])
@@ -66,7 +67,7 @@ for i, (x,y) in enumerate(loader):
         preds = nn.functional.softmax(model(x), dim=1)
         #print(preds.shape)
         preds = torch.argmax(preds, dim=1).float()    
-    real_image = np.zeros((x.shape[0], 480, 854, 3), dtype=np.uint8)
+    real_image = np.zeros((x.shape[0], 480, 480, 3), dtype=np.uint8)
     preds = preds.cpu()
     for k in range(13):
         real_image[preds == k] = rgb_val[k]
