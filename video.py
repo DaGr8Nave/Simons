@@ -30,7 +30,12 @@ val_transforms = A.Compose(
         ToTensorV2(),
     ],
 )
-
+center_crop = A.Compose(
+    [
+        A.CenterCrop(480,480),
+    ]
+    
+)
 #make predictions
 dataset = VideoFrameDataset([VIDEO_PATH], transforms=val_transforms)
 result = cv2.VideoWriter(OUTPUT_PATH, 
@@ -67,12 +72,15 @@ for i, (x,y) in enumerate(loader):
         real_image[preds == k] = rgb_val[k]
     for k in range(5):
         predicted = Image.fromarray(real_image[k])
-        original_image = dataset.__getimage__(5*i+k)
-        color_mask = dataset.__getcolormask__(5*i+k)
-        new_image = Image.new('RGB', (854*3, 480))
+        original_image = np.array(dataset.__getimage__(5*i+k))
+        color_mask = np.array(dataset.__getcolormask__(5*i+k))
+        transformed = center_crop(image = original_image, mask = color_mask)
+        original_image = Image.fromarray(transformed['image'])
+        color_mask = Image.fromarray(transformed['mask'])        
+        new_image = Image.new('RGB', (480*3, 480))
         new_image.paste(original_image, (0,0))
-        new_image.paste(color_mask, (854,0))
-        new_image.paste(predicted, (1708,0))
+        new_image.paste(color_mask, (480,0))
+        new_image.paste(predicted, (960,0))
         open_cv_image = np.array(new_image)
         open_cv_image = open_cv_image[:, : , ::-1].copy()
         result.write(open_cv_image)
