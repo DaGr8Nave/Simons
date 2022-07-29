@@ -25,6 +25,7 @@ class VideoFrameDataset(Dataset):
         self.transforms = transforms
         for path in paths:
             start_num = int(path[-5:])
+            start_num = 0
             for k in range(600):
                 curr_num = start_num + k
                 self.image_dir.append(os.path.join(path, f'frame_{curr_num}.png'))
