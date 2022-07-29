@@ -25,11 +25,11 @@ class VideoFrameDataset(Dataset):
         self.transforms = transforms
         for path in paths:
             start_num = int(path[-5:])
-            for k in range(80):
+            for k in range(600):
                 curr_num = start_num + k
-                self.image_dir.append(os.path.join(path, f'frame_{curr_num}_endo.png'))
-                self.mask_dir.append(os.path.join(path, f'frame_{curr_num}_endo_watershed_mask.png'))
-                self.color_mask_dir.append(os.path.join(path, f'frame_{curr_num}_endo_color_mask.png'))
+                self.image_dir.append(os.path.join(path, f'frame_{curr_num}.png'))
+                self.mask_dir.append(os.path.join(path, f'frame_{curr_num}.png'))
+                self.color_mask_dir.append(os.path.join(path, f'frame_{curr_num}.png'))
     def __len__(self):
         return len(self.image_dir)
     def __getitem__(self, index):
