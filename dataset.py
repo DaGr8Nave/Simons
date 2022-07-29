@@ -28,9 +28,12 @@ class VideoFrameDataset(Dataset):
             start_num = 0
             for k in range(600):
                 curr_num = start_num + k
-                self.image_dir.append(os.path.join(path, f'frame_{curr_num}.png'))
-                self.mask_dir.append(os.path.join(path, f'frame_{curr_num}.png'))
-                self.color_mask_dir.append(os.path.join(path, f'frame_{curr_num}.png'))
+                curr_num = str(curr_num)
+                while len(curr_num) < 5:
+                    curr_num = '0'+curr_num
+                self.image_dir.append(os.path.join(path, f'{curr_num}.png'))
+                self.mask_dir.append(os.path.join(path, f'{curr_num}.png'))
+                self.color_mask_dir.append(os.path.join(path, f'{curr_num}.png'))
     def __len__(self):
         return len(self.image_dir)
     def __getitem__(self, index):
