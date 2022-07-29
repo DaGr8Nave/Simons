@@ -24,7 +24,7 @@ class VideoFrameDataset(Dataset):
         self.color_mask_dir = []
         self.transforms = transforms
         for path in paths:
-            start_num = int(path[-5:])
+            #start_num = int(path[-5:])
             start_num = 0
             for k in range(600):
                 curr_num = start_num + k
