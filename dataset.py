@@ -29,7 +29,7 @@ class VideoFrameDataset(Dataset):
             for k in range(600):
                 curr_num = start_num + k
                 curr_num = str(curr_num)
-                while len(curr_num) < 5:
+                while len(curr_num) < 6:
                     curr_num = '0'+curr_num
                 self.image_dir.append(os.path.join(path, f'{curr_num}.png'))
                 self.mask_dir.append(os.path.join(path, f'{curr_num}.png'))
