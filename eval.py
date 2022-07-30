@@ -57,7 +57,7 @@ val_dataset = VideoFrameDataset(val_paths, val_transforms)
 test_dataset = VideoFrameDataset(test_paths, val_transforms)
 CLASSES=2
 model = UNet(n_channels=3, n_classes=CLASSES).to("cuda")
-load_checkpoint(torch.load("../../input/GrasperSegmentation/GrasperSegmenter.pth.tar"), model)
+load_checkpoint(torch.load("../../input/graspersegmentation/GrasperSegmenter.pth.tar"), model)
 test_loader = DataLoader(test_dataset, batch_size=5)
 val_loader = DataLoader(val_dataset, batch_size=5)
 print("------------------ Test Set Results ------------------")
