@@ -26,14 +26,14 @@ class VideoFrameDataset(Dataset):
         for path in paths:
             start_num = int(path[-5:])
             #start_num = 0
-            for k in range(600):
+            for k in range(80):
                 curr_num = start_num + k
-                mask = np.array(Image.open(os.path.join(path, f'frame{curr_num}_endo_watershed_mask.png')))[:,:,0]
+                mask = np.array(Image.open(os.path.join(path, f'frame_{curr_num}_endo_watershed_mask.png')))[:,:,0]
                 if np.sum(mask==31) == 0:
                     continue
-                self.image_dir.append(os.path.join(path, f'frame{curr_num}_endo.png'))
-                self.mask_dir.append(os.path.join(path, f'frame{curr_num}_endo_watershed_mask.png'))
-                self.color_mask_dir.append(os.path.join(path, f'frame{curr_num}_endo_color_mask.png'))
+                self.image_dir.append(os.path.join(path, f'frame_{curr_num}_endo.png'))
+                self.mask_dir.append(os.path.join(path, f'frame_{curr_num}_endo_watershed_mask.png'))
+                self.color_mask_dir.append(os.path.join(path, f'frame_{curr_num}_endo_color_mask.png'))
     def __len__(self):
         return len(self.image_dir)
     def __getitem__(self, index):
