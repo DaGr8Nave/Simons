@@ -55,8 +55,9 @@ center_crop = A.Compose(
 )
 val_dataset = VideoFrameDataset(val_paths, val_transforms)
 test_dataset = VideoFrameDataset(test_paths, val_transforms)
-model = UNet(n_channels=3, n_classes=13).to("cuda")
-load_checkpoint(torch.load("../../input/unet-cholecseg8k-center-crop/80epCenterCrop.pth.tar"), model)
+CLASSES=2
+model = UNet(n_channels=3, n_classes=CLASSES).to("cuda")
+load_checkpoint(torch.load("../../input/GrasperSegmentation/GrasperSegmenter.pth.tar"), model)
 test_loader = DataLoader(test_dataset, batch_size=5)
 val_loader = DataLoader(val_dataset, batch_size=5)
 print("------------------ Test Set Results ------------------")
@@ -92,7 +93,7 @@ for j in range(50):
         preds = torch.argmax(preds, dim=1).float()
     #print(f"Dice Score for Prediction {i}: {dice_coef_multilabel(y, preds, 13)}")
     dice = dice_coef_multilabel(y,preds,13)
-    formatDice(dice[:,0]/dice[:,1])
+    formatDice(np.divide(dice[:,0]/dice[:,1]))
     preds = preds.cpu()
     real_image = np.zeros((480, 480, 3), dtype=np.uint8)
     for k in range(13):
