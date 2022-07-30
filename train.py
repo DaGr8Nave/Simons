@@ -130,6 +130,8 @@ def main():
     weights = np.zeros((CLASSES,), dtype=np.float32)
     for i in range(CLASSES):
         weights[i] = minimum/cnts[i]
+    
+    weights[0] = 0
     print(weights)
 
     loss_fn = DiceLoss(weight=weights)
