@@ -126,14 +126,6 @@ def main():
         for j in range(CLASSES):
             cnts[j] += y[:,:,:,j].sum()
     print(cnts)
-    for i, (x,y) in enumerate(val_loader):
-        for j in range(CLASSES):
-            cnts[j] += y[:,:,:,j].sum()
-    print(cnts)
-    for i, (x,y) in enumerate(test_loader):
-        for j in range(CLASSES):
-            cnts[j] += y[:,:,:,j].sum()
-    print(cnts)    
     minimum = np.amin(cnts)
     weights = np.zeros((CLASSES,), dtype=np.float32)
     for i in range(CLASSES):
