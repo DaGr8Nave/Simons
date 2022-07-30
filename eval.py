@@ -96,7 +96,7 @@ for j in range(50):
     formatDice(np.divide(dice[:,0]/dice[:,1]))
     preds = preds.cpu()
     real_image = np.zeros((480, 480, 3), dtype=np.uint8)
-    for k in range(13):
+    for k in range(CLASSES):
         real_image[preds[0] == k] = rgb_val[k]
     real_image = Image.fromarray(real_image)
     original_image = np.array(test_dataset.__getimage__(i), dtype=np.uint8)
