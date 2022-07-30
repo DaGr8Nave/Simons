@@ -97,7 +97,7 @@ for j in range(50):
     preds = preds.cpu()
     real_image = np.zeros((480, 480, 3), dtype=np.uint8)
     for k in range(CLASSES):
-        real_image[preds[0] == k] = rgb_val[k]
+        real_image[preds[0] == k] = rgb_val[CLASSES[k]]
     real_image = Image.fromarray(real_image)
     original_image = np.array(test_dataset.__getimage__(i), dtype=np.uint8)
     transformed = center_crop(image = original_image, mask = color_mask)
