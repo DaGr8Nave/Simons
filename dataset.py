@@ -28,7 +28,7 @@ class VideoFrameDataset(Dataset):
             #start_num = 0
             for k in range(600):
                 curr_num = start_num + k
-                mask = np.array(Image.open(os.path.join(path, f'fname{curr_num}_endo_watershed_mask.png')))[:,:,0]
+                mask = np.array(Image.open(os.path.join(path, f'frame{curr_num}_endo_watershed_mask.png')))[:,:,0]
                 if np.sum(mask==31) == 0:
                     continue
                 self.image_dir.append(os.path.join(path, f'frame{curr_num}_endo.png'))
