@@ -16,7 +16,7 @@ mapping = {50:0,
           22: 10,
           33: 11,
           5: 12}
-CLASS_IDS = [0,1,2,3,4,5,6,7,8,9,10,11,12]
+CLASS_IDS = [0,5]
 class VideoFrameDataset(Dataset):
     def __init__(self, paths, transforms=None):
         self.image_dir = []
@@ -24,16 +24,16 @@ class VideoFrameDataset(Dataset):
         self.color_mask_dir = []
         self.transforms = transforms
         for path in paths:
-            #start_num = int(path[-5:])
-            start_num = 0
+            start_num = int(path[-5:])
+            #start_num = 0
             for k in range(600):
                 curr_num = start_num + k
-                curr_num = str(curr_num)
-                while len(curr_num) < 6:
-                    curr_num = '0'+curr_num
-                self.image_dir.append(os.path.join(path, f'{curr_num}.png'))
-                self.mask_dir.append(os.path.join(path, f'{curr_num}.png'))
-                self.color_mask_dir.append(os.path.join(path, f'{curr_num}.png'))
+                mask = np.array(Image.open(os.path.join(path, f'fname{curr_num}_endo_watershed_mask.png')))[:,:,0]
+                if np.sum(mask==31) == 0:
+                    continue
+                self.image_dir.append(os.path.join(path, f'frame{curr_num}_endo.png'))
+                self.mask_dir.append(os.path.join(path, f'frame{curr_num}_endo_watershed_mask.png'))
+                self.color_mask_dir.append(os.path.join(path, f'frame{curr_num}_endo_color_mask.png'))
     def __len__(self):
         return len(self.image_dir)
     def __getitem__(self, index):

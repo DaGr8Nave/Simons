@@ -92,7 +92,7 @@ def main():
             ToTensorV2(),
         ],
     )
-    CLASSES = 13
+    CLASSES = 2
     model = UNet(n_channels=3, n_classes=CLASSES).to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
@@ -114,6 +114,9 @@ def main():
     train_dataset = VideoFrameDataset(train_paths, train_transform)
     val_dataset = VideoFrameDataset(val_paths, val_transforms)
     test_dataset = VideoFrameDataset(test_paths, val_transforms)
+    print(train_dataset.__len__())
+    print(val_dataset.__len__())
+    print(test_dataset.__len__())
     cnts = np.zeros((CLASSES,))
     
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
