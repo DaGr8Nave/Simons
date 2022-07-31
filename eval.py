@@ -95,7 +95,7 @@ for j in range(50):
     #print(f"Dice Score for Prediction {i}: {dice_coef_multilabel(y, preds, 13)}")
     dice = np.array(dice_coef_multilabel(y,preds,CLASSES))
     print(dice.shape)
-    formatDice(np.divide(dice[:,0]/dice[:,1]))
+    formatDice(np.divide(dice[:,0],dice[:,1]))
     preds = preds.cpu()
     real_image = np.zeros((480, 480, 3), dtype=np.uint8)
     for k in range(CLASSES):
