@@ -56,6 +56,7 @@ center_crop = A.Compose(
 val_dataset = VideoFrameDataset(val_paths, val_transforms)
 test_dataset = VideoFrameDataset(test_paths, val_transforms)
 CLASSES=2
+CLASS_IDS=[0,5]
 model = UNet(n_channels=3, n_classes=CLASSES).to("cuda")
 load_checkpoint(torch.load("../../input/graspersegmentation/GrasperSegmenter.pth.tar"), model)
 test_loader = DataLoader(test_dataset, batch_size=5)
@@ -93,11 +94,12 @@ for j in range(50):
         preds = torch.argmax(preds, dim=1).float()
     #print(f"Dice Score for Prediction {i}: {dice_coef_multilabel(y, preds, 13)}")
     dice = np.array(dice_coef_multilabel(y,preds,CLASSES))
+    print(dice.shape)
     formatDice(np.divide(dice[:,0]/dice[:,1]))
     preds = preds.cpu()
     real_image = np.zeros((480, 480, 3), dtype=np.uint8)
     for k in range(CLASSES):
-        real_image[preds[0] == k] = rgb_val[CLASSES[k]]
+        real_image[preds[0] == k] = rgb_val[CLASS_IDS[k]]
     real_image = Image.fromarray(real_image)
     original_image = np.array(test_dataset.__getimage__(i), dtype=np.uint8)
     transformed = center_crop(image = original_image, mask = color_mask)

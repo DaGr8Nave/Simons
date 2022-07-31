@@ -33,7 +33,7 @@ def dice_coef_multilabel(y_true, y_pred, numLabels):
     if y_pred.dim() == 3:
         y_pred = torch.nn.functional.one_hot(y_pred.to(torch.int64), num_classes=len(CLASS_IDS))
     for index in range(numLabels):
-        scores.append(dice_coef(y_true[:,:,:,index], y_pred[:,:,:,index]))
+        scores.append([dice_coef(y_true[:,:,:,index], y_pred[:,:,:,index])])
     return scores
 def formatDice(dice):
     for i in range(len(CLASS_IDS)):
