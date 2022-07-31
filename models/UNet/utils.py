@@ -27,13 +27,13 @@ def dice_coef(y_true, y_pred):
 
 def dice_coef_multilabel(y_true, y_pred, numLabels):
     dice=0
-    scores = []
+    scores = torch.zeros((len(CLASS_IDS), 2))
     if y_true.dim() == 3:
         y_true = torch.nn.functional.one_hot(y_true, num_classes=len(CLASS_IDS))
     if y_pred.dim() == 3:
         y_pred = torch.nn.functional.one_hot(y_pred.to(torch.int64), num_classes=len(CLASS_IDS))
     for index in range(numLabels):
-        scores.append([dice_coef(y_true[:,:,:,index], y_pred[:,:,:,index])])
+        scores[index] = dice_coef(y_true[:,:,:,index], y_pred[:,:,:,index])
     return scores
 def formatDice(dice):
     for i in range(len(CLASS_IDS)):
