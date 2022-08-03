@@ -27,7 +27,7 @@ from models.UNet.utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda"
 BATCH_SIZE = 2
-NUM_EPOCHS = 20
+NUM_EPOCHS = 15
 LOAD_MODEL = False
 
 LAMBDA = 1e-4
@@ -92,8 +92,8 @@ def main():
             ToTensorV2(),
         ],
     )
-    CLASSES = 2
-    model = UNet(n_channels=3, n_classes=CLASSES).to(DEVICE)
+    CLASSES = 13
+    model = NestedUNet(input_channels=3, num_classes=CLASSES).to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
     test_paths = []
@@ -130,8 +130,6 @@ def main():
     weights = np.zeros((CLASSES,), dtype=np.float32)
     for i in range(CLASSES):
         weights[i] = minimum/cnts[i]
-    
-    weights[0] = 0
     print(weights)
 
     loss_fn = DiceLoss(weight=weights)
