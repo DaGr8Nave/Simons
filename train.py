@@ -16,7 +16,7 @@ from models.DiceLoss import *
 from models.topoloss import *
 import matplotlib.pyplot as plt
 
-from models.UNet.utils import (
+from models.utils import (
     load_checkpoint,
     save_checkpoint,
     check_accuracy,
