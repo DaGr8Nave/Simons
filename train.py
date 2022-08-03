@@ -44,9 +44,9 @@ def train_fn(loader, model, optimizer, loss_fn, scaler, weights=None):
             predictions = torch.softmax(model(data),dim=1)
             targets = torch.permute(targets,  (0,3,1,2))
             topo = 0
-            for b in range(data.shape[0]):
-                for c in range(predictions.shape[1]):
-                    topo += getTopoLoss(predictions[b,c,:,:], targets[b,c,:,:], topo_size=50) * weights[c] * LAMBDA
+            #for b in range(data.shape[0]):
+                #for c in range(predictions.shape[1]):
+                    #topo += getTopoLoss(predictions[b,c,:,:], targets[b,c,:,:], topo_size=50) * weights[c] * LAMBDA
             loss = loss_fn(predictions, targets) + topo
             #loss += LAMBDA * getTopoLoss(predictions, targets)
             current_loss += loss.item()
