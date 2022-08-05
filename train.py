@@ -24,11 +24,11 @@ from models.utils import (
 )
 
 
-LEARNING_RATE = 1e-4
+LEARNING_RATE = 3e-4
 DEVICE = "cuda"
 BATCH_SIZE = 2
 NUM_EPOCHS = 25
-LOAD_MODEL = True
+LOAD_MODEL = False
 
 LAMBDA = 1e-4
 loss_per_epoch = []
