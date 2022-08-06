@@ -7,6 +7,9 @@ import torch.optim as optim
 from models.UNet.unet_parts import *
 from models.UNet.unet_model import UNet
 from models.NestedUNet.nestedUNet import *
+from models.TransUNet.vit_seg_configs import *
+from models.TransUNet.vit_seg_modeling import *
+from models.TransUNet.vit_seg_modeling_resnet_skip import *
 from torch.utils.data import DataLoader
 from dataset import VideoFrameDataset
 import os 
@@ -27,7 +30,7 @@ from models.utils import (
 LEARNING_RATE = 3e-4
 DEVICE = "cuda"
 BATCH_SIZE = 2
-NUM_EPOCHS = 25
+NUM_EPOCHS = 15
 LOAD_MODEL = False
 
 LAMBDA = 1e-4
@@ -93,7 +96,9 @@ def main():
         ],
     )
     CLASSES = 13
-    model = NestedUNet(input_channels=3, num_classes=CLASSES).to(DEVICE)
+    config_vit = CONFIGS['R50-ViT-B_16']
+    config_vit.patches.grid= (int(480/16), int(480/16))
+    model = ViT_seg(config_vit, img_size=480, num_classes=13).cuda()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
     test_paths = []
