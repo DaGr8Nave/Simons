@@ -29,7 +29,7 @@ from models.utils import (
 
 LEARNING_RATE = 3e-4
 DEVICE = "cuda"
-BATCH_SIZE = 8
+BATCH_SIZE = 2
 NUM_EPOCHS = 15
 LOAD_MODEL = False
 
@@ -124,14 +124,20 @@ def main():
     print(val_dataset.__len__())
     print(test_dataset.__len__())
     cnts = np.zeros((CLASSES,))
-    
+    amts = np.zeros((CLASSES,))
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
+    
     for i, (x,y) in enumerate(train_loader):
         for j in range(CLASSES):
             cnts[j] += y[:,:,:,j].sum()
+            if y[:,:,:,j].sum() > 0:
+                amts[j]+=1
     print(cnts)
+    for i in range(CLASSES):
+        cnts[i] = cnts[i] * (amts[i]/test_dataset.__len__())
+
     minimum = np.amin(cnts)
     weights = np.zeros((CLASSES,), dtype=np.float32)
     for i in range(CLASSES):
