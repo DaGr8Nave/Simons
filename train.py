@@ -98,7 +98,7 @@ def main():
     CLASSES = 13
     config_vit = CONFIGS['R50-ViT-B_16']
     config_vit.patches.grid= (int(480/16), int(480/16))
-    model = ViT_seg(config_vit, img_size=480, num_classes=13).cuda()
+    model = VisionTransformer(config_vit, img_size=480, num_classes=13).cuda()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
     test_paths = []
