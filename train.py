@@ -30,8 +30,8 @@ from models.utils import (
 LEARNING_RATE = 3e-4
 DEVICE = "cuda"
 BATCH_SIZE = 2
-NUM_EPOCHS = 15
-LOAD_MODEL = False
+NUM_EPOCHS = 25
+LOAD_MODEL = True
 
 LAMBDA = 1e-4
 loss_per_epoch = []
@@ -136,7 +136,7 @@ def main():
                 amts[j]+=1
     print(cnts)
     for i in range(CLASSES):
-        cnts[i] = cnts[i] * (amts[i]/test_dataset.__len__())
+        #cnts[i] = cnts[i] * (amts[i]/test_dataset.__len__())
 
     minimum = np.amin(cnts)
     weights = np.zeros((CLASSES,), dtype=np.float32)
@@ -146,8 +146,8 @@ def main():
 
     loss_fn = DiceLoss(weight=weights)
     if LOAD_MODEL:
-        load_checkpoint(torch.load("../../input/nestedunet-for-cholecseg8k/15epNestedUNet.pth.tar"), model)
-        optimizer.load_state_dict(torch.load("../../input/nestedunet-for-cholecseg8k/15epNestedUNet.pth.tar")['optimizer'])
+        load_checkpoint(torch.load("../../input/transunetcholecseg8kmodels/TransUNet15ep.pth.tar"), model)
+        optimizer.load_state_dict(torch.load("../../input/transunetcholecseg8kmodels/TransUNet15ep.pth.tar")['optimizer'])
 
     check_accuracy(val_loader, model, device=DEVICE) 
     #save_predictions_as_imgs(val_loader, model, device=DEVICE)
