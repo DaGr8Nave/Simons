@@ -135,7 +135,7 @@ def main():
             if y[:,:,:,j].sum() > 0:
                 amts[j]+=1
     print(cnts)
-    for i in range(CLASSES):
+    #for i in range(CLASSES):
         #cnts[i] = cnts[i] * (amts[i]/test_dataset.__len__())
 
     minimum = np.amin(cnts)
