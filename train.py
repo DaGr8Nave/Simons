@@ -30,8 +30,8 @@ from models.utils import (
 LEARNING_RATE = 3e-4
 DEVICE = "cuda"
 BATCH_SIZE = 2
-NUM_EPOCHS = 25
-LOAD_MODEL = True
+NUM_EPOCHS = 15
+LOAD_MODEL = False
 
 LAMBDA = 1e-4
 loss_per_epoch = []
@@ -135,8 +135,8 @@ def main():
             if y[:,:,:,j].sum() > 0:
                 amts[j]+=1
     print(cnts)
-    #for i in range(CLASSES):
-        #cnts[i] = cnts[i] * (amts[i]/test_dataset.__len__())
+    for i in range(CLASSES):
+        cnts[i] = cnts[i] * (amts[i]/train_dataset.__len__())
 
     minimum = np.amin(cnts)
     weights = np.zeros((CLASSES,), dtype=np.float32)
