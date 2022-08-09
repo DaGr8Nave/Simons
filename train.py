@@ -125,9 +125,9 @@ def main():
     print(test_dataset.__len__())
     cnts = np.zeros((CLASSES,))
     amts = np.zeros((CLASSES,))
-    train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE)
-    val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
-    test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
+    train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=True)
     
     for i, (x,y) in enumerate(train_loader):
         for j in range(CLASSES):
