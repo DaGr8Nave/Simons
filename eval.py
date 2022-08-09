@@ -56,10 +56,10 @@ center_crop = A.Compose(
 )
 val_dataset = VideoFrameDataset(val_paths, val_transforms)
 test_dataset = VideoFrameDataset(test_paths, val_transforms)
-CLASSES=2
-CLASS_IDS=[0,5]
+CLASSES=13
+CLASS_IDS=[0,1,2,3,4,5,6,7,8,9,10,11,12]
 model = UNet(n_channels=3, n_classes=CLASSES).to("cuda")
-load_checkpoint(torch.load("../../input/graspersegmentation/GrasperSegmenter.pth.tar"), model)
+load_checkpoint(torch.load("../../input/transunetcholecseg8kmodels/TransUNet35ep.pth.tar"), model)
 test_loader = DataLoader(test_dataset, batch_size=5)
 val_loader = DataLoader(val_dataset, batch_size=5)
 print("------------------ Test Set Results ------------------")
