@@ -30,7 +30,7 @@ from models.utils import (
 LEARNING_RATE = 3e-4
 DEVICE = "cuda"
 BATCH_SIZE = 2
-NUM_EPOCHS = 15
+NUM_EPOCHS = 18
 LOAD_MODEL = False
 
 LAMBDA = 1e-4
@@ -135,13 +135,13 @@ def main():
             if y[:,:,:,j].sum() > 0:
                 amts[j]+=1
     print(cnts)
-    for i in range(CLASSES):
-        cnts[i] = cnts[i] * (amts[i]/train_dataset.__len__())
+    #for i in range(CLASSES):
+        #cnts[i] = cnts[i] * (amts[i]/train_dataset.__len__())
 
-    minimum = np.amin(cnts)
+    #minimum = np.amin(cnts)
     weights = np.zeros((CLASSES,), dtype=np.float32)
     for i in range(CLASSES):
-        weights[i] = minimum/cnts[i]
+        weights[i] = (480*480*train_dataset.__len__())/(CLASSES*cnts[i])
     print(weights)
 
     loss_fn = DiceLoss(weight=weights)
