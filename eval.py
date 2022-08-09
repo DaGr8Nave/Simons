@@ -61,7 +61,10 @@ val_dataset = VideoFrameDataset(val_paths, val_transforms)
 test_dataset = VideoFrameDataset(test_paths, val_transforms)
 CLASSES=13
 CLASS_IDS=[0,1,2,3,4,5,6,7,8,9,10,11,12]
-model = UNet(n_channels=3, n_classes=CLASSES).to("cuda")
+config_vit = CONFIGS['R50-ViT-B_16']
+config_vit.patches.grid= (int(480/16), int(480/16))
+config_vit.n_classes=CLASSES
+model = VisionTransformer(config_vit, img_size=480, num_classes=CLASSES).cuda()
 load_checkpoint(torch.load("../../input/transunetcholecseg8kmodels/TransUNet35ep.pth.tar"), model)
 test_loader = DataLoader(test_dataset, batch_size=5)
 val_loader = DataLoader(val_dataset, batch_size=5)
