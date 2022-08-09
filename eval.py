@@ -7,6 +7,7 @@ import torch.nn as nn
 import torch.optim as optim
 from models.UNet.unet_model import UNet
 from models.NestedUNet.nestedUNet import *
+from models.TransUNet import *
 from torch.utils.data import DataLoader
 from dataset import VideoFrameDataset
 import os 
