@@ -7,7 +7,9 @@ import torch.nn as nn
 import torch.optim as optim
 from models.UNet.unet_model import UNet
 from models.NestedUNet.nestedUNet import *
-from models.TransUNet import *
+from models.TransUNet.vit_seg_configs import *
+from models.TransUNet.vit_seg_modeling import *
+from models.TransUNet.vit_seg_modeling_resnet_skip import *
 from torch.utils.data import DataLoader
 from dataset import VideoFrameDataset
 import os 
