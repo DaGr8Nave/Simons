@@ -109,6 +109,7 @@ def main():
     dataset_cfg = cfg['dataset'][dataset]
     decoder_cfg = cfg['decoder']['mask_transformer']
     dataset_cfg['im_size']=480
+    
     im_size = dataset_cfg["im_size"]
     crop_size = dataset_cfg.get("crop_size", im_size)
     window_size = dataset_cfg.get("window_size", im_size)
@@ -120,6 +121,7 @@ def main():
     model_cfg["drop_path_rate"] = 0.1
     decoder_cfg["name"] = decoder
     model_cfg["decoder"] = decoder_cfg
+    model_cfg["n_cls"] = CLASSES
     model = create_segmenter(model_cfg)
 
     config_vit.patches.grid= (int(480/16), int(480/16))
