@@ -123,7 +123,7 @@ def main():
     model_cfg["decoder"] = decoder_cfg
     model_cfg["n_cls"] = CLASSES
     model = create_segmenter(model_cfg)
-
+    model = model.to("cuda")
     #config_vit.patches.grid= (int(480/16), int(480/16))
     #config_vit.n_classes=13
     #model = VisionTransformer(config_vit, img_size=480, num_classes=13).cuda()
