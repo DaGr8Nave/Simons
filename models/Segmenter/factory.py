@@ -10,12 +10,12 @@ from timm.models.vision_transformer import default_cfgs
 from timm.models.registry import register_model
 from timm.models.vision_transformer import _create_vision_transformer
 
-from vit import VisionTransformer
-from utils import checkpoint_filter_fn
-from decoder import DecoderLinear
-from decoder import MaskTransformer
-from segmenter import Segmenter
-import utils.torch as ptu
+from models.Segmenter.vit import VisionTransformer
+from models.Segmenter.utils import checkpoint_filter_fn
+from models.Segmenter.decoder import DecoderLinear
+from models.Segmenter.decoder import MaskTransformer
+from models.Segmenter.segmenter import Segmenter
+import models.Segmenter.torch as ptu
 
 
 @register_model
