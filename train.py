@@ -106,6 +106,7 @@ def main():
     decoder = 'mask_transformer'
     model_cfg = cfg['model'][backbone]
     dataset_cfg = cfg['dataset'][dataset]
+    decoder_cfg = cfg['decoder']['mask_transformer']
     dataset_cfg['im_size']=480
     im_size = dataset_cfg["im_size"]
     crop_size = dataset_cfg.get("crop_size", im_size)
@@ -114,8 +115,8 @@ def main():
 
     model_cfg["image_size"] = (crop_size, crop_size)
     model_cfg["backbone"] = backbone
-    model_cfg["dropout"] = dropout
-    model_cfg["drop_path_rate"] = drop_path
+    model_cfg["dropout"] = 0.0
+    model_cfg["drop_path_rate"] = 0.1
     decoder_cfg["name"] = decoder
     model_cfg["decoder"] = decoder_cfg
     model = create_segmenter(model_cfg)
