@@ -10,6 +10,10 @@ from models.NestedUNet.nestedUNet import *
 from models.TransUNet.vit_seg_configs import *
 from models.TransUNet.vit_seg_modeling import *
 from models.TransUNet.vit_seg_modeling_resnet_skip import *
+from models.Segmenter.segmenter import *
+from models.Segmenter.factory import *
+from models.Segmenter.utils import *
+from models.Segmenter import config
 from torch.utils.data import DataLoader
 from dataset import VideoFrameDataset
 import os 
@@ -27,10 +31,10 @@ from models.utils import (
 )
 
 
-LEARNING_RATE = 3e-4
+LEARNING_RATE = 1e-3
 DEVICE = "cuda"
 BATCH_SIZE = 2
-NUM_EPOCHS = 18
+NUM_EPOCHS = 20
 LOAD_MODEL = False
 
 LAMBDA = 1e-4
@@ -96,7 +100,30 @@ def main():
         ],
     )
     CLASSES = 13
-    config_vit = CONFIGS['R50-ViT-B_16']
+    cfg = config.load_config()
+    backbone = 'vit_base_path16_384'
+    dataset = 'pascal_context'
+    decoder = 'mask_transformer'
+    model_cfg = cfg['model'][backbone]
+    dataset_cfg = cfg['dataset'][dataset]
+    dataset_cfg['im_size']=480
+    if not im_size:
+        im_size = dataset_cfg["im_size"]
+    if not crop_size:
+        crop_size = dataset_cfg.get("crop_size", im_size)
+    if not window_size:
+        window_size = dataset_cfg.get("window_size", im_size)
+    if not window_stride:
+        window_stride = dataset_cfg.get("window_stride", im_size)
+
+    model_cfg["image_size"] = (crop_size, crop_size)
+    model_cfg["backbone"] = backbone
+    model_cfg["dropout"] = dropout
+    model_cfg["drop_path_rate"] = drop_path
+    decoder_cfg["name"] = decoder
+    model_cfg["decoder"] = decoder_cfg
+    model = create_segmenter(model_cfg)
+
     config_vit.patches.grid= (int(480/16), int(480/16))
     config_vit.n_classes=13
     model = VisionTransformer(config_vit, img_size=480, num_classes=13).cuda()
@@ -138,10 +165,10 @@ def main():
     #for i in range(CLASSES):
         #cnts[i] = cnts[i] * (amts[i]/train_dataset.__len__())
 
-    #minimum = np.amin(cnts)
+    minimum = np.amin(cnts)
     weights = np.zeros((CLASSES,), dtype=np.float32)
     for i in range(CLASSES):
-        weights[i] = (480*480*train_dataset.__len__())/(CLASSES*cnts[i])
+        weights[i] = minimum/cnts[i]
     print(weights)
 
     loss_fn = DiceLoss(weight=weights)
