@@ -12,6 +12,7 @@ from models.TransUNet.vit_seg_modeling import *
 from models.TransUNet.vit_seg_modeling_resnet_skip import *
 from models.Segmenter.segmenter import *
 from models.Segmenter.factory import *
+from models.Segmenter.factory import create_segmenter
 from models.Segmenter.utils import *
 from models.Segmenter import config
 from torch.utils.data import DataLoader
