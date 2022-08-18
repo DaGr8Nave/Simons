@@ -101,7 +101,7 @@ def main():
     )
     CLASSES = 13
     cfg = config.load_config()
-    backbone = 'vit_base_path16_384'
+    backbone = 'vit_small_patch16_384'
     dataset = 'pascal_context'
     decoder = 'mask_transformer'
     model_cfg = cfg['model'][backbone]
