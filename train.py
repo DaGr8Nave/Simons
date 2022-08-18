@@ -35,7 +35,7 @@ from models.utils import (
 LEARNING_RATE = 1e-3
 DEVICE = "cuda"
 BATCH_SIZE = 2
-NUM_EPOCHS = 20
+NUM_EPOCHS = 15
 LOAD_MODEL = False
 
 LAMBDA = 1e-4
