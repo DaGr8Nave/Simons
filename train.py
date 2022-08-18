@@ -107,14 +107,10 @@ def main():
     model_cfg = cfg['model'][backbone]
     dataset_cfg = cfg['dataset'][dataset]
     dataset_cfg['im_size']=480
-    if not im_size:
-        im_size = dataset_cfg["im_size"]
-    if not crop_size:
-        crop_size = dataset_cfg.get("crop_size", im_size)
-    if not window_size:
-        window_size = dataset_cfg.get("window_size", im_size)
-    if not window_stride:
-        window_stride = dataset_cfg.get("window_stride", im_size)
+    im_size = dataset_cfg["im_size"]
+    crop_size = dataset_cfg.get("crop_size", im_size)
+    window_size = dataset_cfg.get("window_size", im_size)
+    window_stride = dataset_cfg.get("window_stride", im_size)
 
     model_cfg["image_size"] = (crop_size, crop_size)
     model_cfg["backbone"] = backbone
