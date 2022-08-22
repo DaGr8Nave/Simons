@@ -35,7 +35,7 @@ from models.utils import (
 LEARNING_RATE = 1e-3
 DEVICE = "cuda"
 BATCH_SIZE = 2
-NUM_EPOCHS = 20
+NUM_EPOCHS = 15
 LOAD_MODEL = False
 
 LAMBDA = 1e-4
@@ -109,6 +109,7 @@ def main():
     dataset_cfg = cfg['dataset'][dataset]
     decoder_cfg = cfg['decoder']['mask_transformer']
     dataset_cfg['im_size']=480
+    
     im_size = dataset_cfg["im_size"]
     crop_size = dataset_cfg.get("crop_size", im_size)
     window_size = dataset_cfg.get("window_size", im_size)
@@ -120,11 +121,12 @@ def main():
     model_cfg["drop_path_rate"] = 0.1
     decoder_cfg["name"] = decoder
     model_cfg["decoder"] = decoder_cfg
+    model_cfg["n_cls"] = CLASSES
     model = create_segmenter(model_cfg)
-
-    config_vit.patches.grid= (int(480/16), int(480/16))
-    config_vit.n_classes=13
-    model = VisionTransformer(config_vit, img_size=480, num_classes=13).cuda()
+    model = model.to("cuda")
+    #config_vit.patches.grid= (int(480/16), int(480/16))
+    #config_vit.n_classes=13
+    #model = VisionTransformer(config_vit, img_size=480, num_classes=13).cuda()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     train_val_paths = []
     test_paths = []
