@@ -8,7 +8,8 @@ model = dict(
     auxiliary_head=dict(num_classes=13),
     # model training and testing settings
     train_cfg=dict(),
-    test_cfg=dict(mode='whole'))
+    test_cfg=dict(crop_size=(64, 64), stride=(42, 42))
+)
 
 data = dict(
     samples_per_gpu=4,
