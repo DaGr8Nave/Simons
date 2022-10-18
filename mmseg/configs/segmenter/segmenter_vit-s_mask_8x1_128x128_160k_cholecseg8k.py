@@ -29,6 +29,9 @@ model = dict(
 
 optimizer = dict(lr=0.001, weight_decay=0.0)
 
+img_norm_cfg = dict( # This img_norm_cfg is widely used because it is mean and std of ImageNet 1K pretrained model
+    mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
+
 crop_size = (128, 128) # Crop size of image in training
 train_pipeline = [
     dict(type='LoadImageFromFile'),
