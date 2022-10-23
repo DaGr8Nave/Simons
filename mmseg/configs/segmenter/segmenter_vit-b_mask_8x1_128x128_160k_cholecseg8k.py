@@ -1,6 +1,6 @@
 _base_ = [
     '../_base_/models/segmenter_vit-b16_mask.py',
-    '../_base_/datasets/ade20k.py', '../_base_/default_runtime.py',
+    '../_base_/datasets/CholecSeg8k_config.py', '../_base_/default_runtime.py',
     '../_base_/schedules/schedule_160k.py'
 ]
 optimizer = dict(lr=0.001, weight_decay=0.0)
