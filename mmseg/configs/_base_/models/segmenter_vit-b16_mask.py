@@ -6,7 +6,7 @@ model = dict(
     pretrained=checkpoint,
     backbone=dict(
         type='VisionTransformer',
-        img_size=(512, 512),
+        img_size=(128, 128),
         patch_size=16,
         in_channels=3,
         embed_dims=768,
@@ -24,7 +24,7 @@ model = dict(
         type='SegmenterMaskTransformerHead',
         in_channels=768,
         channels=768,
-        num_classes=150,
+        num_classes=13,
         num_layers=2,
         num_heads=12,
         embed_dims=768,
@@ -32,5 +32,5 @@ model = dict(
         loss_decode=dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
     ),
-    test_cfg=dict(mode='slide', crop_size=(512, 512), stride=(480, 480)),
+    test_cfg=dict(mode='slide', crop_size=(128, 128), stride=(42, 42)),
 )
