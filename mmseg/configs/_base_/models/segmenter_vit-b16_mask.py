@@ -32,5 +32,5 @@ model = dict(
         loss_decode=dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
     ),
-    test_cfg=dict(mode='slide', crop_size=(480, 480), stride=(0, 128)),
+    test_cfg=dict(mode='slide', crop_size=(480, 480), stride=(1, 128)),
 )
