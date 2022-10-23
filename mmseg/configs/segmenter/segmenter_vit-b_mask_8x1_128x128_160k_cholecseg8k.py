@@ -7,7 +7,7 @@ optimizer = dict(lr=0.001, weight_decay=0.0)
 
 img_norm_cfg = dict(
     mean=[127.5, 127.5, 127.5], std=[127.5, 127.5, 127.5], to_rgb=True)
-crop_size = (128, 128)
+crop_size = (180, 180)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', reduce_zero_label=False),
