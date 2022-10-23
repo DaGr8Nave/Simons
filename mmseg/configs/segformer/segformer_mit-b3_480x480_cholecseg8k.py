@@ -11,4 +11,4 @@ model = dict(
     decode_head=dict(
         in_channels=[64, 128, 320, 512],
         num_classes=13,),
-    test_cfg=dict(crop_size=(128, 128), stride=(84, 84)))
+    test_cfg=dict(crop_size=(480, 480), stride=(1, 128)))
