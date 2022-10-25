@@ -6,7 +6,7 @@ _base_ = [
 optimizer = dict(lr=0.001, weight_decay=0.0)
 
 img_norm_cfg = dict(
-    mean=[127.5, 127.5, 127.5], std=[127.5, 127.5, 127.5], to_rgb=True)
+    mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 crop_size = (480, 480)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
