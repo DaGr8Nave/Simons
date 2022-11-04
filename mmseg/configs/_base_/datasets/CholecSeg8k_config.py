@@ -34,7 +34,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=1, # Batch size of a single GPU
+    samples_per_gpu=2, # Batch size of a single GPU
     workers_per_gpu=4, # Worker to pre-fetch data for each single GPU
     train=dict( # Train dataset config
         type=dataset_type, # Type of dataset, refer to mmseg/datasets/ for details.
