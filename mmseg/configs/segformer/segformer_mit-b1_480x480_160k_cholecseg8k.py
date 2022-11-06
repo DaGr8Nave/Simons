@@ -8,4 +8,4 @@ model = dict(
     backbone=dict(
         embed_dims=64, num_heads=[1, 2, 5, 8], num_layers=[2, 2, 2, 2]),
     decode_head=dict(in_channels=[64, 128, 320, 512], num_classes=13),
-    test_cfg=dict(mode='slide', crop_size=(480,480), (320,320)))
+    test_cfg=dict(mode='slide', crop_size=(480,480), stride=(320,320)))
