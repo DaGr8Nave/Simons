@@ -25,7 +25,7 @@ model = dict(
         dropout_ratio=0.0,
         loss_decode=dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0)),
-    test_cfg=dict(crop_size=(480, 480), stride=(1, 128)))
+    test_cfg=dict(crop_size=(480, 480), stride=(320, 320)))
 
 optimizer = dict(lr=0.001, weight_decay=0.0)
 
